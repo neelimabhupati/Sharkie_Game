@@ -36,13 +36,13 @@
                 <button id="start-button" type="button" onclick="startGame()">
                     Start Game
                 </button>
-                <button id="game-info-button" type="button">
+                <button id="game-info-button" type="button" onclick="document.getElementById('game-info').showModal()">
                     Game Info
                 </button>
-                <button id="game-info-button" type="button">
+                <button id="game-info-button" type="button" onclick="document.getElementById('credits').showModal()">
                     Credits
                 </button>
-                <button id="game-info-button" type="button">
+                <button id="game-info-button" type="button" onclick="document.getElementById('impressum').showModal()">
                     Impressum
                 </button>
             </nav>
@@ -55,11 +55,87 @@
             Replay
         </button>
 
-        <button id="fullscreen-button" type="button" onclick="toggleFullscreen()">
-            Fullscreen
+        <button id="fullscreen-button" type="button" onclick="toggleFullscreen()" aria-label="Enter fullscreen"
+            title="Enter fullscreen">
+            ⛶
         </button>
-        
+
+        <button id="home-button" type="button" onclick="goHome()" aria-label="Home screen" title="Home screen">
+            🏠
+        </button>
+
     </div>
+
+    <dialog id="game-info">
+        <button class="info-close" type="button" onclick="document.getElementById('game-info').close()">×</button>
+
+        <img class="controls-image" src="./images/Grafiken-Sharkie/6.Botones/Instructions 1.png"
+            alt="Arrow keys to move Sharkie, D to attack">
+
+        <div class="info-items">
+            <div class="info-item">
+                <img src="./images/Grafiken-Sharkie/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png"
+                    alt="Puffer fish">
+                <span>× 3</span>
+            </div>
+            <div class="info-item">
+                <img src="./images/Grafiken-Sharkie/2.Enemy/2 Jelly fish/Súper dangerous/Green 1.png" alt="Jellyfish">
+                <span>× 2</span>
+            </div>
+            <div class="info-item">
+                <img src="./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/2.floating/1.png" alt="Whale boss">
+                <span>× 1</span>
+            </div>
+            <div class="info-item">
+                <img src="./images/Grafiken-Sharkie/4. Marcadores/1. Coins/1.png" alt="Coin">
+                <span>× 10</span>
+            </div>
+            <div class="info-item">
+                <img src="./images/Grafiken-Sharkie/1.Sharkie/4.Attack/Bubble trap/Bubble.png" alt="Normal bubble">
+                <span>× 5</span>
+            </div>
+            <div class="info-item">
+                <img src="./images/Grafiken-Sharkie/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png"
+                    alt="Poison bubble">
+                <span>× 4</span>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog id="impressum">
+        <button class="info-close" type="button" onclick="document.getElementById('impressum').close()"
+            aria-label="Close">×</button>
+
+        <p><strong>Information pursuant to Section 5 of the German Digital Services Act (DDG)</strong></p>
+        <p><strong>Name</strong><br>Neelima Bhupati</p>
+        <p><strong>Address</strong><br>Angelbrechting 12<br>85586 Poing, Germany</p>
+        <p><strong>E-mail</strong><br>
+            <a href="mailto:neelimadocument@gmail.com">neelimadocument@gmail.com</a>
+        </p>
+        <p>Sharkie Project was created as a personal learning project and is intended for educational purposes only. It
+            is not a commercial product.</p>
+    </dialog>
+
+    <dialog id="credits">
+        <button class="info-close" type="button" onclick="document.getElementById('credits').close()"
+            aria-label="Close">×</button>
+
+        <h2>Credits</h2>
+
+        <div class="credits-list">
+            <p><strong>Game development</strong><br>Neelima Bhupati</p>
+            <p><strong>Technologies</strong><br>HTML, CSS and JavaScript</p>
+            <p><strong>Graphics and character assets</strong><br>
+                Sharkie asset pack — [artist/source and license details]
+            </p>
+            <p><strong>Original project inspiration</strong><br>
+                El Pollo Loco tutorial project — [creator/source link]
+            </p>
+            <p><strong>Project purpose</strong><br>
+                Personal learning project; not for commercial use.
+            </p>
+        </div>
+    </dialog>
 
 </body>
 

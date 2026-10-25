@@ -20,6 +20,10 @@ function replayGame() {
     
 }
 
+function goHome() {
+    window.location.reload();
+}
+
 function toggleFullscreen() {
     const gameContainer = document.getElementById("game-container");
 
@@ -32,9 +36,13 @@ function toggleFullscreen() {
 
 document.addEventListener("fullscreenchange", () => {
     const button = document.getElementById("fullscreen-button");
-    button.textContent = document.fullscreenElement
-        ? "Exit Fullscreen"
-        : "Fullscreen";
+    const isFullscreen = Boolean(document.fullscreenElement);
+
+    button.setAttribute(
+        "aria-label",
+        isFullscreen ? "Exit fullscreen" : "Enter fullscreen"
+    );
+    button.title = isFullscreen ? "Exit fullscreen" : "Enter fullscreen";
 });
 
 window.addEventListener('keydown', (event) => {

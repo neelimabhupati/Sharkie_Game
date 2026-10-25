@@ -42,6 +42,7 @@ h1 {
     border-radius: 30px;
 }
 
+
 #replay-button {
     display: none;
     position: absolute;
@@ -49,16 +50,33 @@ h1 {
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
-    padding: 10px 24px;
-    border: 2px solid #8fffea;
-    border-radius: 14px;
-    background: rgba(31, 5, 224, 0.88);
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
     color: #fff;
-    font: 700 20px Arial, sans-serif;
+    font: 700 24px Arial, sans-serif;
     cursor: pointer;
+    box-shadow: none;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+    text-decoration: none;
+    animation: replayDance 1s ease-in-out infinite;
 }
 
-#fullscreen-button {
+#replay-button:hover {
+    color: #8fffea;
+    text-decoration: none;
+}
+
+@keyframes replayDance {
+    0%, 100% {
+        transform: translate(-50%, 0);
+    }
+    50% {
+        transform: translate(-50%, -8px);
+    }
+}
+
+/* #fullscreen-button {
     position: absolute;
     top: 22px;
     right: 52px;
@@ -99,6 +117,77 @@ h1 {
 #game-container:fullscreen #canvas {
     width: min(100vw, 150vh);
     height: auto;
+}
+
+#home-button {
+    position: absolute;
+    top: 22px;
+    right: 150px;
+    z-index: 2;
+    padding: 8px 12px;
+    border: 2px solid #8fffea;
+    border-radius: 10px;
+    background: rgba(31, 5, 224, 0.88);
+    color: #fff;
+    font: 700 16px Arial, sans-serif;
+    cursor: pointer;
+}
+
+#game-container:fullscreen #home-button {
+    top: 24px;
+    right: 180px;
+    padding: 14px 20px;
+    font-size: 22px;
+    border-radius: 12px;
+} */
+
+#fullscreen-button,
+#home-button {
+    position: absolute;
+    top: 16px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 2px solid #8fffea;
+    border-radius: 10px;
+    background: rgba(31, 5, 224, 0.88);
+    color: #fff;
+    font: 700 24px Arial, sans-serif;
+    cursor: pointer;
+}
+
+#fullscreen-button {
+    right: 16px;
+}
+
+#home-button {
+    right: 68px;
+}
+
+#fullscreen-button:hover,
+#home-button:hover {
+    background: #b8fff4;
+    color: #073b66;
+}
+
+#game-container:fullscreen #fullscreen-button,
+#game-container:fullscreen #home-button {
+    top: 24px;
+    width: 56px;
+    height: 56px;
+    font-size: 30px;
+}
+
+#game-container:fullscreen #fullscreen-button {
+    right: 24px;
+}
+
+#game-container:fullscreen #home-button {
+    right: 92px;
 }
 
 .start-screen-content {
@@ -162,9 +251,12 @@ h1 {
 /* for button movement animation */
 
 @keyframes gentleFloat {
-    0%, 100% {
+
+    0%,
+    100% {
         left: 0;
     }
+
     50% {
         left: -4px;
     }
@@ -172,4 +264,215 @@ h1 {
 
 .start-menu button:nth-child(even) {
     animation-delay: 0.10s;
+}
+/* 
+#game-info {
+    position: relative;
+    width: min(85vw, 700px);
+    border: 3px solid #8fffea;
+    border-radius: 20px;
+    padding: 24px;
+    background: #073b66;
+}
+
+#game-info::backdrop {
+    background: rgba(0, 15, 40, 0.75);
+}
+
+.controls-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 12px auto 24px;
+}
+
+.info-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 70px;
+    border: 1px solid #8fffea;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.info-item img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.info-item span {
+    color: white;
+    font: bold 18px Arial, sans-serif;
+}
+
+.info-close {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    border: 0;
+    background: transparent;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+@media (max-width: 500px) {
+    .info-items {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+#game-info,
+#impressum {
+    font-size: 22px;
+    position: relative;
+    width: min(85vw, 700px);
+    border: 3px solid #8fffea;
+    border-radius: 20px;
+    padding: 24px;
+    color: white;
+    background: #073b66;
+}
+
+#game-info::backdrop,
+#impressum::backdrop {
+    background: rgba(0, 15, 40, 0.75);
+}
+
+#impressum a {
+    color: #8fffea;
+    font-size: 22px;
+}
+
+#credits {
+    position: relative;
+    width: min(85vw, 700px);
+    border: 3px solid #8fffea;
+    border-radius: 20px;
+    padding: 24px;
+    color: white;
+    background: #073b66;
+    font: 18px Arial, sans-serif;
+}
+
+#credits::backdrop {
+    background: rgba(0, 15, 40, 0.75);
+}
+
+#credits h2 {
+    margin-top: 0;
+    color: #8fffea;
+}
+
+.credits-list p {
+    margin: 16px 0;
+    line-height: 1.5;
+}
+
+.credits-list strong {
+    color: #8fffea;
+}
+ */
+
+
+#game-info,
+#impressum,
+#credits {
+    box-sizing: border-box;
+    position: relative;
+    width: min(85vw, 700px);
+    height: min(70vh, 520px);
+    overflow-y: hidden;
+    margin: auto;
+    border: 3px solid #8fffea;
+    border-radius: 20px;
+    padding: 24px;
+    color: white;
+    background: #073b66;
+    font: 18px Arial, sans-serif;
+}
+
+#game-info::backdrop,
+#impressum::backdrop,
+#credits::backdrop {
+    background: rgba(0, 15, 40, 0.75);
+}
+
+.controls-image {
+    display: block;
+    max-height: 180px;
+    object-fit: contain;
+    margin: 0 auto 12px;
+}
+
+.info-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 56px;
+    border: 1px solid #8fffea;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.info-item img {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+}
+
+.info-item span {
+    color: white;
+    font: bold 18px Arial, sans-serif;
+}
+
+.info-close {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    border: 0;
+    background: transparent;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+#impressum a {
+    color: #8fffea;
+}
+
+#credits h2 {
+    margin-top: 0;
+    color: #8fffea;
+}
+
+.credits-list p {
+    margin: 16px 0;
+    line-height: 1.5;
+}
+
+.credits-list strong {
+    color: #8fffea;
+}
+
+@media (max-width: 500px) {
+    .info-items {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
