@@ -132,7 +132,7 @@ class World {
         setInterval(() => {
 
             if (!this.gameStarted) return;
-            
+
             // check collisions
             this.checkCollisions();
             if (
@@ -215,7 +215,7 @@ class World {
 
             const characterBottom = this.character.y + this.character.height;
             const isStomping =
-                enemy instanceof Chicken &&
+                enemy instanceof PufferFish &&
                 this.character.speedY < 0 &&
                 characterBottom < enemy.y + enemy.height / 2;
 
