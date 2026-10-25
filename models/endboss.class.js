@@ -90,4 +90,52 @@ class Endboss extends MovableObject {
 
         return false;
     }
+
+    draw(ctx) {
+        super.draw(ctx);
+
+        if (this.defeated) return;
+
+        const moveX = Math.sin(Date.now() / 250) * 5;
+        const moveY = Math.sin(Date.now() / 400) * 8;
+
+        const bubbleX = this.x - 210 + moveX;
+        const bubbleY = this.y + 150 + moveY;
+        const bubbleWidth = 220;
+        const bubbleHeight = 70;
+
+        ctx.fillStyle = "#ffffff";
+        ctx.strokeStyle = "#073b66";
+        ctx.lineWidth = 3;
+
+        // Speech tail
+        ctx.beginPath();
+        ctx.moveTo(bubbleX + bubbleWidth - 50, bubbleY + bubbleHeight - 8);
+        ctx.lineTo(bubbleX + bubbleWidth - 20, bubbleY + bubbleHeight - 8);
+        ctx.lineTo(bubbleX + bubbleWidth + 15, bubbleY + bubbleHeight + 18);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Bubble box
+        ctx.beginPath();
+        ctx.roundRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight, 12);
+        ctx.fill();
+        ctx.stroke();
+
+        // Bubble text
+        ctx.fillStyle = "#073b66";
+        ctx.font = "bold 16px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(
+            "You can only defeat me",
+            bubbleX + bubbleWidth / 2,
+            bubbleY + 28
+        );
+        ctx.fillText(
+            "with 4 poison bubbles!",
+            bubbleX + bubbleWidth / 2,
+            bubbleY + 52
+        );
+    }
 }
