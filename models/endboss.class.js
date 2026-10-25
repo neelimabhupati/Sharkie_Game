@@ -108,6 +108,7 @@ class Endboss extends MovableObject {
 
         if (this.messageShownAt === null) {
             this.messageShownAt = Date.now();
+            startBossBgm();
 
         }
 
@@ -121,9 +122,12 @@ class Endboss extends MovableObject {
         }
 
         const sharkieCanReply =
-            Date.now() - this.messageShownAt >= 2500;
+            Date.now() - this.messageShownAt >= 7000;
 
-        if (sharkieCanReply) return;
+        if (sharkieCanReply) {
+            stopBossBgm();
+            return;
+        }
 
         const moveX = Math.sin(Date.now() / 250) * 5;
         const moveY = Math.sin(Date.now() / 400) * 8;

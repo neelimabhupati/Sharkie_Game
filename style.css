@@ -77,7 +77,8 @@ h1 {
 }
 
 #fullscreen-button,
-#home-button {
+#home-button,
+.volume-button {
     position: absolute;
     top: 16px;
     z-index: 2;
@@ -93,6 +94,25 @@ h1 {
     color: #fff;
     font: 700 24px Arial, sans-serif;
     cursor: pointer;
+}
+
+#volume-button {
+    position: absolute;
+    top: 30px;
+    right: 134px;
+    z-index: 2;
+}
+
+#home-volume-button {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 2;
+}
+
+#game-container:fullscreen #volume-button {
+    top: 24px;
+    right: 200px;
 }
 
 #fullscreen-button {

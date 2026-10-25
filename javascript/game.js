@@ -2,6 +2,41 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 
+let audioMuted = false;
+
+const homeBgm = new Audio(
+    "./images/Grafiken-Sharkie/7.Sound track/Home screen_bgm.mp3"
+);
+homeBgm.loop = true;
+homeBgm.volume = 0.4;
+
+
+const gameBgm = new Audio(
+    "./images/Grafiken-Sharkie/7.Sound track/Start Game_bgm.mp3"
+);
+gameBgm.loop = true;
+gameBgm.volume = 0.25;
+
+const bossBgm = new Audio(
+    "./images/Grafiken-Sharkie/7.Sound track/endboss_bgm.mp3"
+);
+bossBgm.loop = true;
+bossBgm.volume = 1;
+
+const yesHaveBgm = new Audio(
+    "./images/Grafiken-Sharkie/7.Sound track/yes i have.mp3"
+);
+yesHaveBgm.loop = true;
+yesHaveBgm.volume = 0.25;
+
+const winningBgm = new Audio(
+    "./images/Grafiken-Sharkie/7.Sound track/winning bgm.mp3"
+);
+winningBgm.loop = true;
+winningBgm.volume = 0.3;
+
+
+
 function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
@@ -12,7 +47,133 @@ function startGame() {
     document.getElementById("start-screen").style.display = "none";
     document.getElementById("game-container").style.display = "block";
     document.getElementById("canvas").style.display = "block";
+
+    homeBgm.pause();
+    homeBgm.currentTime = 0;
+
+    keyboard = new Keyboard();
     init();
+    applyMuteToWorldSounds();
+
+    gameBgm.currentTime = 0;
+    gameBgm.play().catch(error => {
+        console.error("Could not play game music:", error);
+    });
+
+    setTimeout(() => {
+        world.gameStarted = true;
+    }, 3000);
+}
+
+function toggleMute() {
+    audioMuted = !audioMuted;
+
+    const audioTracks = [
+        homeBgm,
+        gameBgm,
+        bossBgm,
+        yesHaveBgm,
+        winningBgm
+    ];
+
+    if (world) {
+        audioTracks.push(
+            world.coinSound,
+            world.bubbleSound,
+            world.hurtSound,
+            world.deadSound
+        );
+    }
+
+    audioTracks.forEach(track => {
+        if (track) {
+            track.muted = audioMuted;
+        }
+    });
+
+    const homeVolumeButton = document.getElementById("home-volume-button");
+    const gameVolumeButton = document.getElementById("volume-button");
+    const icon = audioMuted ? "🔇" : "🔊";
+    const label = audioMuted ? "Unmute audio" : "Mute audio";
+
+    homeVolumeButton.textContent = icon;
+    homeVolumeButton.setAttribute("aria-label", label);
+    homeVolumeButton.title = label;
+
+    gameVolumeButton.textContent = icon;
+    gameVolumeButton.setAttribute("aria-label", label);
+    gameVolumeButton.title = label;
+}
+
+function applyMuteToWorldSounds() {
+    if (!world) return;
+
+    [
+        world.coinSound,
+        world.bubbleSound,
+        world.hurtSound,
+        world.deadSound
+    ].forEach(sound => {
+        if (sound) {
+            sound.muted = audioMuted;
+        }
+    });
+}
+
+function stopAllBgm() {
+    [homeBgm, gameBgm, bossBgm, yesHaveBgm, winningBgm].forEach(track => {
+        track.pause();
+        track.currentTime = 0;
+    });
+}
+
+function startYesHaveBgm() {
+    stopAllBgm();
+    yesHaveBgm.play().catch(error => {
+        console.error("Could not play Yes, I have music:", error);
+    });
+}
+
+function startWinningBgm() {
+    stopAllBgm();
+    winningBgm.play().catch(error => {
+        console.error("Could not play winning music:", error);
+    });
+}
+
+function stopGameBgm() {
+    gameBgm.pause();
+    gameBgm.currentTime = 0;
+}
+
+function startBossBgm() {
+    gameBgm.pause();
+
+    if (bossBgm.paused) {
+        bossBgm.currentTime = 0;
+        bossBgm.play().catch(error => {
+            console.error("Could not play Endboss music:", error);
+        });
+    }
+}
+
+function stopBossBgm() {
+    if (!bossBgm.paused) {
+        bossBgm.pause();
+        bossBgm.currentTime = 0;
+    }
+
+    if (
+        world &&
+        world.replyShownAt === null &&
+        !world.gameLost &&
+        !world.gameWon &&
+        gameBgm.paused
+    ) {
+        gameBgm.play().catch(error => {
+            console.error("Could not resume game music:", error);
+        });
+    }
 }
 
 function replayGame() {
@@ -66,7 +227,7 @@ window.addEventListener('keydown', (event) => {
 
     if (event.keyCode == 68) {
         keyboard.D = true;
-        
+
         if (world && world.replyShownAt !== null) {
             world.dPressedAfterReply = true;
         }
@@ -99,3 +260,15 @@ window.addEventListener('keyup', (event) => {
     // console.log(event);
 
 });
+
+document.addEventListener(
+    "click",
+    (event) => {
+        if (event.target.closest("#start-screen") && homeBgm.paused) {
+            homeBgm.play().catch((error) => {
+                console.error("Could not play home screen music:", error);
+            });
+        }
+    },
+    true
+);

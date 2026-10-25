@@ -86,6 +86,8 @@ class Character extends MovableObject {
     animate() {
 
         setInterval(() => {
+            if (!this.world?.gameStarted) return;
+            
             if (this.bossAttackActive) {
                 return;
             }
@@ -179,14 +181,24 @@ class Character extends MovableObject {
             return;
         }
 
-        if (this.world.replyShownAt === null) {
-            this.world.replyShownAt = Date.now();
-            this.world.dPressedAfterReply = false;
-        }
-
         const hasEnoughPoisonBubbles =
             this.world.collectedPoisonBubbles >= 4;
 
+        if (this.world.replyShownAt === null) {
+            this.world.replyShownAt = Date.now();
+            this.world.dPressedAfterReply = false;
+
+            if (hasEnoughPoisonBubbles) {
+                startYesHaveBgm();
+
+            } else {
+                stopAllBgm();
+                this.world.deadSound.currentTime = 0;
+                this.world.deadSound.play().catch(error => {
+                    console.error("Could not play loss sound:", error);
+                });
+            }
+        }
         const showHint =
             hasEnoughPoisonBubbles &&
             Date.now() - this.world.replyShownAt >= 3000 &&

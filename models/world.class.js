@@ -6,6 +6,9 @@ class World {
     canvas;
     ctx;
     keyboard;
+
+    gameStarted = false;
+
     camera_x = 0;
     lifeStatusBar = new LifeStatusBar();
     coinStatusBar = new CoinStatusBar();
@@ -27,6 +30,23 @@ class World {
 
     collectedPoisonBubbles = 0;
 
+
+    coinSound = new Audio(
+        "./images/Grafiken-Sharkie/7.Sound track/coin.mp3"
+    );
+    bubbleSound = new Audio(
+        "./images/Grafiken-Sharkie/7.Sound track/bubble.mp3"
+    );
+    hurtSound = new Audio(
+        "./images/Grafiken-Sharkie/7.Sound track/hurt.mp3"
+    );
+
+    deadSoundStarted = false;
+
+    deadSound = new Audio(
+        "./images/Grafiken-Sharkie/7.Sound track/dead.mp3"
+    );
+
     replyShownAt = null;
     dPressedAfterReply = false;
 
@@ -36,6 +56,10 @@ class World {
         this.keyboard = keyboard;
         this.winImage.src = './images/Grafiken-Sharkie/6.Botones/Tittles/You win/Mesa de trabajo 1.png';
         this.loseImage.src = './images/Grafiken-Sharkie/6.Botones/Tittles/Game Over/you lost the game.png';
+        this.coinSound.volume = 0.2;
+        this.bubbleSound.volume = 0.2;
+        this.hurtSound.volume = 0.3;
+        this.deadSound.volume = 1;
         this.draw();
         this.setWorld();
         this.run();
@@ -48,6 +72,10 @@ class World {
         const endboss = this.level.enemies.find(
             enemy => enemy instanceof Endboss
         );
+
+        this.level.enemies.forEach(enemy => {
+            enemy.world = this;
+        });
 
         if (endboss) {
             endboss.world = this;
@@ -103,9 +131,12 @@ class World {
     run() {
         setInterval(() => {
 
+            if (!this.gameStarted) return;
+            
             // check collisions
             this.checkCollisions();
             if (
+                !this.gameLost &&
                 this.replyShownAt !== null &&
                 this.collectedPoisonBubbles < 4 &&
                 Date.now() - this.replyShownAt >= 1500
@@ -115,7 +146,18 @@ class World {
             }
 
             if (this.character.isDead()) {
+                if (!this.deadSoundStarted) {
+                    this.deadSoundStarted = true;
+                    stopGameBgm();
+
+                    this.deadSound.currentTime = 0;
+                    this.deadSound.play().catch(error => {
+                        console.error("Could not play dead sound:", error);
+                    });
+                }
+
                 if (this.character.deadAnimationFinished) {
+                    stopGameBgm();
                     this.gameLost = true;
                 }
                 return;
@@ -190,6 +232,10 @@ class World {
 
             } else {
                 this.character.hit();
+                this.hurtSound.currentTime = 0;
+                this.hurtSound.play().catch(error => {
+                    console.error("Could not play hurt sound:", error);
+                });
                 this.lifeStatusBar.setPercentage(this.character.energy);
             }
         }
@@ -215,6 +261,7 @@ class World {
                             }
                             setTimeout(() => {
                                 this.gameWon = true;
+                                startWinningBgm();
                             }, 600);
                         }, 1500);
 
@@ -230,6 +277,10 @@ class World {
             if (this.character.isColliding(coin)) {
                 this.level.coins.splice(i, 1);
                 this.collectedCoins++;
+                this.coinSound.currentTime = 0;
+                this.coinSound.play().catch(error => {
+                    console.error("Could not play coin sound:", error);
+                });
 
                 const percentage = (this.collectedCoins / this.totalCoins) * 100;
                 this.coinStatusBar.setPercentage(percentage);
@@ -245,6 +296,11 @@ class World {
             ) {
                 this.level.bottles.splice(i, 1);
                 this.collectedBottles++;
+
+                this.bubbleSound.currentTime = 0;
+                this.bubbleSound.play().catch(error => {
+                    console.error("Could not play bubble sound:", error);
+                });
 
                 if (bottle.isPoisoned) {
                     this.collectedPoisonBubbles++;

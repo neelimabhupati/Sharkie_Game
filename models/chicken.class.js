@@ -23,16 +23,20 @@ class Chicken extends MovableObject {
 
     animate() {
         setInterval(() => {
-            if (!this.dead) {
-                this.moveLeft();
-            }
-        }, 1000 / 60); // Move the cloud left every 1/60th of a second 
+            if (!this.world?.gameStarted || this.dead) return;
+
+            this.moveLeft();
+        }, 1000 / 60);
 
         setInterval(() => {
-            if (!this.dead) {
-                this.playAnimation(this.IMAGES_WALKING);
+            if (this.dead) return;
+
+            if (this.world?.gameStarted) {
+                this.x -= this.speed;
             }
-        }, 200); // Move the character every 1/60th of a second
+
+            this.playAnimation(this.IMAGES_SWIMMING);
+        }, 200);
     }
 
     die() {

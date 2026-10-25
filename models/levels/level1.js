@@ -31,7 +31,7 @@ const level1 = new Level([
     Array.from({ length: 10 }, (_, index) =>
         new Coin(
             150 + index * 200 + Math.random() * 100,
-            190 + Math.random() * 120
+            200 + Math.random() * 120
         )
     ),
 
