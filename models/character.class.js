@@ -168,7 +168,6 @@ class Character extends MovableObject {
         if (
             this.otherDirection || !endboss ||
             endboss.messageShownAt === null ||
-            this.world.collectedPoisonBubbles < 4 ||
             Date.now() - endboss.messageShownAt < 2000
 
         ) {
@@ -185,7 +184,11 @@ class Character extends MovableObject {
             this.world.dPressedAfterReply = false;
         }
 
+        const hasEnoughPoisonBubbles =
+            this.world.collectedPoisonBubbles >= 4;
+
         const showHint =
+            hasEnoughPoisonBubbles &&
             Date.now() - this.world.replyShownAt >= 3000 &&
             !this.world.dPressedAfterReply;
 
@@ -216,6 +219,7 @@ class Character extends MovableObject {
         ctx.fillStyle = '#073b66';
         ctx.font = 'bold 16px Arial';
         ctx.textAlign = 'center';
+
         if (showHint) {
             ctx.fillText(
                 'Hint: Press D 4 times',
@@ -227,7 +231,7 @@ class Character extends MovableObject {
                 bubbleX + bubbleWidth / 2,
                 bubbleY + 53
             );
-        } else {
+        } else if (hasEnoughPoisonBubbles) {
             ctx.fillText(
                 'Yes, I have!',
                 bubbleX + bubbleWidth / 2,
@@ -238,6 +242,17 @@ class Character extends MovableObject {
                 bubbleX + bubbleWidth / 2,
                 bubbleY + 53
             );
+        } else {
+            ctx.fillText(
+                "No, I don't have :( ",
+                bubbleX + bubbleWidth / 2,
+                bubbleY + 29
+            );
+            // ctx.fillText(
+            //     'I need 4 poison bubbles!',
+            //     bubbleX + bubbleWidth / 2,
+            //     bubbleY + 53
+            // );
         }
     }
 

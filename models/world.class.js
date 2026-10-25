@@ -35,7 +35,7 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.winImage.src = './images/Grafiken-Sharkie/6.Botones/Tittles/You win/Mesa de trabajo 1.png';
-        this.loseImage.src = './images/Grafiken-Sharkie/6.Botones/Tittles/Game Over/Recurso 9.png';
+        this.loseImage.src = './images/Grafiken-Sharkie/6.Botones/Tittles/Game Over/you lost the game.png';
         this.draw();
         this.setWorld();
         this.run();
@@ -105,6 +105,15 @@ class World {
 
             // check collisions
             this.checkCollisions();
+            if (
+                this.replyShownAt !== null &&
+                this.collectedPoisonBubbles < 4 &&
+                Date.now() - this.replyShownAt >= 1500
+            ) {
+                this.gameLost = true;
+                return;
+            }
+
             if (this.character.isDead()) {
                 if (this.character.deadAnimationFinished) {
                     this.gameLost = true;

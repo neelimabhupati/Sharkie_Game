@@ -121,7 +121,6 @@ class Endboss extends MovableObject {
         }
 
         const sharkieCanReply =
-            this.world.collectedPoisonBubbles >= 4 &&
             Date.now() - this.messageShownAt >= 2500;
 
         if (sharkieCanReply) return;
