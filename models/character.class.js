@@ -212,7 +212,15 @@ class Character extends MovableObject {
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.roundRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight, 12);
+        ctx.ellipse(
+            bubbleX + bubbleWidth / 2,
+            bubbleY + bubbleHeight / 2,
+            bubbleWidth / 2,
+            bubbleHeight / 2,
+            0,
+            0,
+            Math.PI * 2
+        );
         ctx.fill();
         ctx.stroke();
 
@@ -246,7 +254,7 @@ class Character extends MovableObject {
             ctx.fillText(
                 "No, I don't have :( ",
                 bubbleX + bubbleWidth / 2,
-                bubbleY + 29
+                bubbleY + bubbleHeight / 2 + 6
             );
             // ctx.fillText(
             //     'I need 4 poison bubbles!',
