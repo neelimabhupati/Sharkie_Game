@@ -17,7 +17,7 @@ function startGame() {
 
 function replayGame() {
     window.location.reload();
-    
+
 }
 
 function goHome() {
@@ -66,6 +66,11 @@ window.addEventListener('keydown', (event) => {
 
     if (event.keyCode == 68) {
         keyboard.D = true;
+        
+        if (world && world.replyShownAt !== null) {
+            world.dPressedAfterReply = true;
+        }
+
     }
 
     // console.log(event);

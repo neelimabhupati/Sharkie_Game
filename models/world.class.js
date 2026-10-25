@@ -27,6 +27,9 @@ class World {
 
     collectedPoisonBubbles = 0;
 
+    replyShownAt = null;
+    dPressedAfterReply = false;
+
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;

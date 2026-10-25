@@ -166,16 +166,28 @@ class Character extends MovableObject {
         );
 
         if (
-            !endboss ||
+            this.otherDirection || !endboss ||
             endboss.messageShownAt === null ||
             this.world.collectedPoisonBubbles < 4 ||
             Date.now() - endboss.messageShownAt < 2000
-
 
         ) {
             // console.log('Poison bubbles collected:', this.collectedPoisonBubbles);
             return;
         }
+
+        if (this.world.dPressedAfterReply) {
+            return;
+        }
+
+        if (this.world.replyShownAt === null) {
+            this.world.replyShownAt = Date.now();
+            this.world.dPressedAfterReply = false;
+        }
+
+        const showHint =
+            Date.now() - this.world.replyShownAt >= 3000 &&
+            !this.world.dPressedAfterReply;
 
         const moveY = Math.sin(Date.now() / 300) * 4;
         const bubbleX = this.x + this.width - 110;
@@ -204,8 +216,29 @@ class Character extends MovableObject {
         ctx.fillStyle = '#073b66';
         ctx.font = 'bold 16px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('Yes, I have!', bubbleX + bubbleWidth / 2, bubbleY + 29);
-        ctx.fillText('Rest in peace!', bubbleX + bubbleWidth / 2, bubbleY + 53);
+        if (showHint) {
+            ctx.fillText(
+                'Hint: Press D 4 times',
+                bubbleX + bubbleWidth / 2,
+                bubbleY + 29
+            );
+            ctx.fillText(
+                'to defeat the Endboss!',
+                bubbleX + bubbleWidth / 2,
+                bubbleY + 53
+            );
+        } else {
+            ctx.fillText(
+                'Yes, I have!',
+                bubbleX + bubbleWidth / 2,
+                bubbleY + 29
+            );
+            ctx.fillText(
+                'Rest in peace!',
+                bubbleX + bubbleWidth / 2,
+                bubbleY + 53
+            );
+        }
     }
 
 }
