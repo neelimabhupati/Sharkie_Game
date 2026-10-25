@@ -36,13 +36,13 @@ const level1 = new Level([
     ),
 
     Array.from({ length: 5 }, (_, index) =>
-        new Bottle(
+        new Bubble(
             300 + index * 350 + Math.random() * 100,
             340
         )
     ).concat(
         Array.from({ length: 8 }, (_, index) =>
-            new Bottle(
+            new Bubble(
                 350 + index * 260,
                 50 + (index % 2) * 80,
                 './images/Grafiken-Sharkie/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png'

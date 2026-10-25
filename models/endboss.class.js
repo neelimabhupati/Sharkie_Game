@@ -66,7 +66,7 @@ class Endboss extends MovableObject {
         }, 200);
     }
 
-    hitByBottle() {
+    hitByBubbles() {
         if (this.defeated) {
             return false;
         }

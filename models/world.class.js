@@ -16,10 +16,10 @@ class World {
     collectedCoins = 0;
     totalCoins = this.level.coins.length;
 
-    collectedBottles = 0;
-    totalBottles = this.level.bottles.length;
+    collectedBubbles = 0;
+    totalBubbles = this.level.bubbles.length;
 
-    bottleStatusBar = new BottleStatusBar();
+    BubblesStatusBar = new BubblesStatusBar();
     throwableObjects = [];
     throwKeyWasPressed = false;
 
@@ -114,13 +114,13 @@ class World {
         //space for fixed object
         this.addToMap(this.lifeStatusBar);
         this.addToMap(this.coinStatusBar);
-        this.addToMap(this.bottleStatusBar);
+        this.addToMap(this.BubblesStatusBar);
         this.ctx.translate(this.camera_x, 0); //forward
 
         this.addToMap(this.character);
         this.addObjecttoMap(this.level.enemies);
         this.addObjecttoMap(this.level.coins);
-        this.addObjecttoMap(this.level.bottles);
+        this.addObjecttoMap(this.level.bubbles);
         this.addObjecttoMap(this.throwableObjects);
 
         this.ctx.translate(-this.camera_x, 0);
@@ -172,36 +172,36 @@ class World {
             return;
         }
 
-        // D key press-ku okka bottle maatrame throw avuthundi.
+        // D key press-ku okka Bubbles maatrame throw avuthundi.
         if (this.throwKeyWasPressed) {
             return;
         }
 
         this.throwKeyWasPressed = true;
 
-        // Bottles collect chesi unte maatrame throw cheyyali.
-        if (this.collectedBottles > 0) {
+        // Bubbles collect chesi unte maatrame throw cheyyali.
+        if (this.collectedBubbles > 0) {
             this.character.playBossAttack();
             const direction = this.character.otherDirection ? -1 : 1;
-            const bottleX = direction === 1
+            const BubblesX = direction === 1
                 ? this.character.x + this.character.width - 20
                 : this.character.x - 60;
-            const bottleY = this.character.y + 120;
+            const BubblesY = this.character.y + 120;
 
             setTimeout(() => {
                 const bubble = new ThrowableObject(
-                    bottleX,
-                    bottleY,
+                    BubblesX,
+                    BubblesY,
                     direction
                 );
                 this.throwableObjects.push(bubble);
             }, 700);
 
-            this.collectedBottles--;
+            this.collectedBubbles--;
 
             const percentage =
-                (this.collectedBottles / this.totalBottles) * 100;
-            this.bottleStatusBar.setPercentage(percentage);
+                (this.collectedBubbles / this.totalBubbles) * 100;
+            this.BubblesStatusBar.setPercentage(percentage);
         }
     }
 
@@ -247,12 +247,12 @@ class World {
         if (endboss && !endboss.defeated) {
 
             for (let i = this.throwableObjects.length - 1; i >= 0; i--) {
-                const bottle = this.throwableObjects[i];
+                const Bubbles = this.throwableObjects[i];
 
-                if (bottle.isColliding(endboss)) {
+                if (Bubbles.isColliding(endboss)) {
                     this.throwableObjects.splice(i, 1);
 
-                    if (endboss.hitByBottle()) {
+                    if (endboss.hitByBubbles()) {
                         setTimeout(() => {
                             const bossIndex = this.level.enemies.indexOf(endboss);
 
@@ -287,30 +287,30 @@ class World {
             }
         }
 
-        for (let i = this.level.bottles.length - 1; i >= 0; i--) {
-            const bottle = this.level.bottles[i];
+        for (let i = this.level.bubbles.length - 1; i >= 0; i--) {
+            const Bubbles = this.level.bubbles[i];
 
             if (
-                this.character.isColliding(bottle) &&
-                this.collectedBottles < this.totalBottles
+                this.character.isColliding(Bubbles) &&
+                this.collectedBubbles < this.totalBubbles
             ) {
-                this.level.bottles.splice(i, 1);
-                this.collectedBottles++;
+                this.level.bubbles.splice(i, 1);
+                this.collectedBubbles++;
 
                 this.bubbleSound.currentTime = 0;
                 this.bubbleSound.play().catch(error => {
                     console.error("Could not play bubble sound:", error);
                 });
 
-                if (bottle.isPoisoned) {
+                if (Bubbles.isPoisoned) {
                     this.collectedPoisonBubbles++;
                     console.log('Poison bubbles collected:', this.collectedPoisonBubbles);
                 }
 
                 const percentage =
-                    (this.collectedBottles / this.totalBottles) * 100;
+                    (this.collectedBubbles / this.totalBubbles) * 100;
 
-                this.bottleStatusBar.setPercentage(percentage);
+                this.BubblesStatusBar.setPercentage(percentage);
             }
         }
     }

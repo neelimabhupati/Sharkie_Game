@@ -1,4 +1,4 @@
-class Bottle extends DrawbleObject {
+class Bubble extends DrawbleObject {
     constructor(
         x,
         y,
