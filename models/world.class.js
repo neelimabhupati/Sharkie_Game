@@ -44,7 +44,11 @@ class World {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         if (this.gameWon || this.gameLost) {
+            document.getElementById('replay-button').style.display =
+                (this.gameWon || this.gameLost) ? 'block' : 'none';
+
             const resultImage = this.gameWon ? this.winImage : this.loseImage;
+
 
             if (resultImage.complete && resultImage.naturalWidth > 0) {
                 this.ctx.drawImage(

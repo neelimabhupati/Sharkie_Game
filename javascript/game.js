@@ -2,20 +2,43 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 
-function startGame() {
-    document.getElementById("start-screen").style.display = "none";
-    document.getElementById("canvas").style.display = "block";
-    init();
-}
-
 function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
     // console.log("My Character is:", world.character);
 }
 
-window.addEventListener('keydown', (event) => {
+function startGame() {
+    document.getElementById("start-screen").style.display = "none";
+    document.getElementById("game-container").style.display = "block";
+    document.getElementById("canvas").style.display = "block";
+    init();
+}
+
+function replayGame() {
+    window.location.reload();
     
+}
+
+function toggleFullscreen() {
+    const gameContainer = document.getElementById("game-container");
+
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    } else {
+        gameContainer.requestFullscreen();
+    }
+}
+
+document.addEventListener("fullscreenchange", () => {
+    const button = document.getElementById("fullscreen-button");
+    button.textContent = document.fullscreenElement
+        ? "Exit Fullscreen"
+        : "Fullscreen";
+});
+
+window.addEventListener('keydown', (event) => {
+
     if (event.keyCode == 39) {
         keyboard.RIGHT = true;
     }
