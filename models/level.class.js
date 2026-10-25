@@ -2,7 +2,7 @@ class Level {
     enemies;
     backgroundObjects;
     coins;
-    bubble;
+    bubbles;
     level_end_x = 2200;
 
     constructor(enemies, backgroundObjects, coins, bubbles) {
