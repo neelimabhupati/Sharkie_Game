@@ -7,6 +7,9 @@ class Endboss extends MovableObject {
     defeated = false;
     hurtUntil = 0;
 
+    world;
+    messageShownAt = null;
+
     IMAGES_WALKING = [
         './images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/2.floating/1.png',
         './images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/2.floating/2.png',
@@ -94,7 +97,34 @@ class Endboss extends MovableObject {
     draw(ctx) {
         super.draw(ctx);
 
-        if (this.defeated) return;
+        if (this.defeated || !this.world) return;
+
+        const screenX = this.x + this.world.camera_x;
+        const bossIsVisible =
+            screenX < this.world.canvas.width &&
+            screenX + this.width > 0;
+
+        if (!bossIsVisible) return;
+
+        if (this.messageShownAt === null) {
+            this.messageShownAt = Date.now();
+
+        }
+
+        if (Date.now() - (this.lastDialogueLogAt || 0) >= 1000) {
+            console.log(
+                'Poison bubbles:', this.world.collectedPoisonBubbles,
+                'Seconds since boss message:',
+                Math.floor((Date.now() - this.messageShownAt) / 1000)
+            );
+            this.lastDialogueLogAt = Date.now();
+        }
+
+        const sharkieCanReply =
+            this.world.collectedPoisonBubbles >= 4 &&
+            Date.now() - this.messageShownAt >= 2500;
+
+        if (sharkieCanReply) return;
 
         const moveX = Math.sin(Date.now() / 250) * 5;
         const moveY = Math.sin(Date.now() / 400) * 8;
@@ -108,7 +138,6 @@ class Endboss extends MovableObject {
         ctx.strokeStyle = "#073b66";
         ctx.lineWidth = 3;
 
-        // Speech tail
         ctx.beginPath();
         ctx.moveTo(bubbleX + bubbleWidth - 50, bubbleY + bubbleHeight - 8);
         ctx.lineTo(bubbleX + bubbleWidth - 20, bubbleY + bubbleHeight - 8);
@@ -117,13 +146,11 @@ class Endboss extends MovableObject {
         ctx.fill();
         ctx.stroke();
 
-        // Bubble box
         ctx.beginPath();
         ctx.roundRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight, 12);
         ctx.fill();
         ctx.stroke();
 
-        // Bubble text
         ctx.fillStyle = "#073b66";
         ctx.font = "bold 16px Arial";
         ctx.textAlign = "center";

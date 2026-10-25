@@ -25,6 +25,8 @@ class World {
     gameLost = false;
     loseImage = new Image();
 
+    collectedPoisonBubbles = 0;
+
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
@@ -39,7 +41,16 @@ class World {
     setWorld() {
         this.character.world = this;
         this.character.animate();
+
+        const endboss = this.level.enemies.find(
+            enemy => enemy instanceof Endboss
+        );
+
+        if (endboss) {
+            endboss.world = this;
+        }
     }
+
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -222,6 +233,11 @@ class World {
             ) {
                 this.level.bottles.splice(i, 1);
                 this.collectedBottles++;
+
+                if (bottle.isPoisoned) {
+                    this.collectedPoisonBubbles++;
+                    console.log('Poison bubbles collected:', this.collectedPoisonBubbles);
+                }
 
                 const percentage =
                     (this.collectedBottles / this.totalBottles) * 100;

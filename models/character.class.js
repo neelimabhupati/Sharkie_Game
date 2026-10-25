@@ -158,4 +158,54 @@ class Character extends MovableObject {
         }, 50);
     }
 
+    draw(ctx) {
+        super.draw(ctx);
+
+        const endboss = this.world?.level.enemies.find(
+            enemy => enemy instanceof Endboss
+        );
+
+        if (
+            !endboss ||
+            endboss.messageShownAt === null ||
+            this.world.collectedPoisonBubbles < 4 ||
+            Date.now() - endboss.messageShownAt < 2000
+
+
+        ) {
+            // console.log('Poison bubbles collected:', this.collectedPoisonBubbles);
+            return;
+        }
+
+        const moveY = Math.sin(Date.now() / 300) * 4;
+        const bubbleX = this.x + this.width - 110;
+        const bubbleY = this.y + 20 + moveY;
+        const bubbleWidth = 220;
+        const bubbleHeight = 70;
+
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#073b66';
+        ctx.lineWidth = 3;
+
+        // Sharkie వైపు చూపించే speech tail
+        ctx.beginPath();
+        ctx.moveTo(bubbleX + 30, bubbleY + bubbleHeight - 5);
+        ctx.lineTo(bubbleX + 65, bubbleY + bubbleHeight - 5);
+        ctx.lineTo(bubbleX + 5, bubbleY + bubbleHeight + 22);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.roundRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight, 12);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#073b66';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Yes, I have!', bubbleX + bubbleWidth / 2, bubbleY + 29);
+        ctx.fillText('Rest in peace!', bubbleX + bubbleWidth / 2, bubbleY + 53);
+    }
+
 }
