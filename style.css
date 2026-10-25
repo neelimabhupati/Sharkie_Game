@@ -141,7 +141,7 @@ h1 {
     border-radius: 12px;
 } */
 
-#fullscreen-button,
+/* #fullscreen-button,
 #home-button {
     position: absolute;
     top: 16px;
@@ -188,6 +188,64 @@ h1 {
 
 #game-container:fullscreen #home-button {
     right: 92px;
+} */
+
+
+#fullscreen-button,
+#home-button {
+    position: absolute;
+    top: 16px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 2px solid #8fffea1f;
+    border-radius: 10px;
+    background: rgba(30, 5, 224, 0.053);
+    color: #fff;
+    font: 700 24px Arial, sans-serif;
+    cursor: pointer;
+}
+
+#fullscreen-button {
+    top: 30px;
+    right: 26px;
+}
+
+#home-button {
+    right: 80px;
+    top: 30px;
+}
+
+#fullscreen-button:hover,
+#home-button:hover {
+    background: #b8fff4;
+    color: #073b66;
+}
+
+#game-container:fullscreen #fullscreen-button,
+#game-container:fullscreen #home-button {
+    top: 24px;
+    width: 72px;
+    height: 72px;
+    font-size: 40px;
+}
+
+#game-container:fullscreen #fullscreen-button {
+    right: 24px;
+}
+
+#game-container:fullscreen #home-button {
+    right: 112px;
+}
+
+#game-container:fullscreen #replay-button {
+    top: 40%;
+    padding: 18px 30px;
+    font-size: clamp(42px, 5vw, 64px);
 }
 
 .start-screen-content {
