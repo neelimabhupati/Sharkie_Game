@@ -10,6 +10,14 @@ class Endboss extends MovableObject {
     world;
     messageShownAt = null;
 
+    introStarted = false;
+    introFinished = false;
+    introFrame = 0;
+
+    phase = "waiting";
+    attackFrame = 0;
+    phaseEndsAt = 0;
+
     IMAGES_WALKING = [
         './images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/2.floating/1.png',
         './images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/2.floating/2.png',
@@ -42,28 +50,102 @@ class Endboss extends MovableObject {
         './images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 10.png'
     ];
 
+    IMAGES_INTRODUCE = Array.from(
+        { length: 10 },
+        (_, index) =>
+            `./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/1.Introduce/${index + 1}.png`
+    );
+
+    IMAGES_ATTACK = Array.from(
+        { length: 6 },
+        (_, index) =>
+            `./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/Attack/${index + 1}.png`
+    );
+
     constructor() {
         super();
         this.loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
+        this.loadImages(this.IMAGES_INTRODUCE);
+        this.loadImages(this.IMAGES_ATTACK);
         this.x = 2500;
         this.animate();
     }
 
     animate() {
         setInterval(() => {
-            if (this.defeated) {
+            if (this.defeated) return;
+
+            if (this.world?.replyShownAt !== null &&
+                this.world?.collectedPoisonBubbles < 4) {
+                const sharkie = this.world.character;
+                const targetX = sharkie.x + sharkie.width - 40;
+
+                if (this.x > targetX) {
+                    this.x = Math.max(targetX, this.x - 12);
+                } else {
+                    this.world.gameLost = true;
+                    return;
+                }
+
+                const path = this.IMAGES_ATTACK[this.attackFrame];
+                this.image = this.imageCache[path];
+                this.attackFrame = (this.attackFrame + 1) % this.IMAGES_ATTACK.length;
+                return;
+            }
+
+            if (this.phase === "waiting") {
+                if (this.world?.character.x >= 1800) {
+                    this.phase = "introduce";
+                    this.introFrame = 0;
+                } else {
+                    return;
+                }
+            }
+
+            if (this.phase === "introduce") {
+                const path = this.IMAGES_INTRODUCE[this.introFrame];
+                this.image = this.imageCache[path];
+                this.introFrame++;
+
+                if (this.introFrame >= this.IMAGES_INTRODUCE.length) {
+                    this.introFinished = true;
+                    this.phase = "floating";
+                    this.phaseEndsAt = Date.now() + 2000;
+                }
                 return;
             }
 
             if (Date.now() < this.hurtUntil) {
                 this.playAnimation(this.IMAGES_HURT);
-            } else {
-                this.playAnimation(this.IMAGES_WALKING);
+                return;
             }
-        }, 200);
+
+            if (this.phase === "floating") {
+                this.playAnimation(this.IMAGES_WALKING);
+
+                if (Date.now() >= this.phaseEndsAt) {
+                    this.phase = "attack";
+                    this.attackFrame = 0;
+                    // this.phaseEndsAt = Date.now() + 4000;
+                }
+                return;
+            }
+
+            if (this.phase === "attack") {
+                this.x = Math.max(2200, this.x - 3);
+                const path = this.IMAGES_ATTACK[this.attackFrame];
+                this.image = this.imageCache[path];
+                this.attackFrame++;
+
+                if (this.attackFrame >= this.IMAGES_ATTACK.length) {
+                    this.phase = "floating";
+                    this.phaseEndsAt = Date.now() + 300;
+                }
+            }
+        }, 300);
     }
 
     hitByBubbles() {
@@ -105,10 +187,11 @@ class Endboss extends MovableObject {
             screenX + this.width > 0;
 
         if (!bossIsVisible) return;
+        if (!this.introFinished) return;
 
         if (this.messageShownAt === null) {
-            this.messageShownAt = Date.now();
             startBossBgm();
+            this.messageShownAt = Date.now();
 
         }
 

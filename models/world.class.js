@@ -7,7 +7,7 @@ class World {
     ctx;
     keyboard;
 
-    gameStarted = false;
+    // gameStarted = false;
 
     camera_x = 0;
     lifeStatusBar = new LifeStatusBar();
@@ -131,25 +131,24 @@ class World {
     run() {
         setInterval(() => {
 
-            if (!this.gameStarted) return;
-
+            // if (!this.gameStarted) return;
             // check collisions
             this.checkCollisions();
-            if (
-                !this.gameLost &&
-                this.replyShownAt !== null &&
-                this.collectedPoisonBubbles < 4 &&
-                Date.now() - this.replyShownAt >= 1500
-            ) {
-                this.gameLost = true;
-                return;
-            }
+            // if (
+            //     !this.gameLost &&
+            //     this.replyShownAt !== null &&
+            //     this.collectedPoisonBubbles < 4 &&
+            //     Date.now() - this.replyShownAt >= 1500
+            // ) {
+            //     this.gameLost = true;
+            //     return;
+            // }
 
             if (this.character.isDead()) {
                 if (!this.deadSoundStarted) {
                     this.deadSoundStarted = true;
-                    stopGameBgm();
-
+                    // stopGameBgm();
+                    stopAllBgm();
                     this.deadSound.currentTime = 0;
                     this.deadSound.play().catch(error => {
                         console.error("Could not play dead sound:", error);
