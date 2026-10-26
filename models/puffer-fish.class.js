@@ -23,14 +23,12 @@ class PufferFish extends MovableObject {
 
     animate() {
         setInterval(() => {
-            if (!this.world?.gameStarted || this.dead) return;
-
+           
             this.moveLeft();
         }, 1000 / 60);
 
         setInterval(() => {
             if (this.dead) return;
-
             this.playAnimation(this.IMAGES_WALKING);
         }, 200);
     }

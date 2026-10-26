@@ -5,7 +5,7 @@ body {
     justify-content: center;
     min-height: 100vh;
     margin: 0;
-    font-family: 'zabras', Arial, Helvetica, sans-serif;
+    font-family: 'Luckiest Guy', Arial, Helvetica, sans-serif;
 
     background-color: #04b8d4;
     background-image: url("./images/Grafiken-Sharkie/3. Background/babyshark_bg.avif");
@@ -20,7 +20,7 @@ h1 {
     letter-spacing: 5px;
     -webkit-text-stroke: 0.01px #7e431b;
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-    color: rgb(13, 13, 25);
+    color: rgb(11, 11, 235);
     margin-bottom: 32px;
     display: flex;
     align-items: center;
@@ -35,7 +35,7 @@ h1 {
 }
 
 #canvas {
-    display: none;
+    display: block;
     width: 100%;
     height: auto;
     background-color: black;
@@ -54,7 +54,7 @@ h1 {
     border: none;
     background: transparent;
     color: #fff;
-    font: 700 24px Arial, sans-serif;
+    font: 700 24px "Luckiest Guy",Arial, sans-serif;
     cursor: pointer;
     box-shadow: none;
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
@@ -92,7 +92,7 @@ h1 {
     border-radius: 10px;
     background: rgba(30, 5, 224, 0.053);
     color: #fff;
-    font: 700 24px Arial, sans-serif;
+    font: 700 24px "Luckiest Guy",Arial, sans-serif;
     cursor: pointer;
 }
 
@@ -191,7 +191,7 @@ h1 {
     border-radius: 14px;
     background: rgba(31, 5, 224, 0.88);
     color: #fff;
-    font: 700 22px Arial, Helvetica, sans-serif;
+    font: 700 22px "Luckiest Guy",Arial, Helvetica, sans-serif;
     white-space: nowrap;
     cursor: pointer;
     text-shadow: 0 2px 3px rgba(0, 0, 0, 0.6);
@@ -241,9 +241,9 @@ h1 {
     border: 3px solid #8fffea;
     border-radius: 20px;
     padding: 24px;
-    color: white;
+    color: rgb(196, 193, 193);
     background: #073b66;
-    font: 18px Arial, sans-serif;
+    font: 18px "Luckiest Guy",Arial, sans-serif;
 }
 
 #game-info::backdrop,
@@ -284,7 +284,7 @@ h1 {
 
 .info-item span {
     color: white;
-    font: bold 18px Arial, sans-serif;
+    font: bold 18px "Luckiest Guy",Arial, sans-serif;
 }
 
 .info-close {
@@ -319,5 +319,28 @@ h1 {
 @media (max-width: 500px) {
     .info-items {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@font-face {
+    font-family: "Luckiest Guy";
+    src: url("./images/Grafiken-Sharkie/5.Font/Luckiest_Guy/LuckiestGuy-Regular.ttf")
+         format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* smartphones media query*/
+@media only screen and (max-width: 720px){
+    canvas{
+        width: 100%;
+    }
+}
+
+/* smartphones */
+
+@media only screen and (max-width: 480px){
+    canvas{
+        height: 100vh;
     }
 }

@@ -1,4 +1,10 @@
-const level1 = new Level([
+let level1;
+
+function initLevel(){
+
+
+ level1 = new Level([
+
     new PufferFish(550),
     new PufferFish(1100),
     new PufferFish(1750),
@@ -50,4 +56,4 @@ const level1 = new Level([
         )
     ));
 
-
+}

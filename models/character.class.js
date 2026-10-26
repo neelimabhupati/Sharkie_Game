@@ -86,7 +86,7 @@ class Character extends MovableObject {
     animate() {
 
         setInterval(() => {
-            if (!this.world?.gameStarted) return;
+            // if (!this.world?.gameStarted) return;
             
             if (this.bossAttackActive) {
                 return;

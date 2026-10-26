@@ -52,7 +52,9 @@ function startGame() {
     homeBgm.currentTime = 0;
 
     keyboard = new Keyboard();
+    initLevel();
     init();
+    world.gameStarted = true;
     applyMuteToWorldSounds();
 
     gameBgm.currentTime = 0;
@@ -60,9 +62,6 @@ function startGame() {
         console.error("Could not play game music:", error);
     });
 
-    setTimeout(() => {
-        world.gameStarted = true;
-    }, 3000);
 }
 
 function toggleMute() {
