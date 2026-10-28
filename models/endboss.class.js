@@ -142,7 +142,7 @@ class Endboss extends MovableObject {
 
                 if (this.attackFrame >= this.IMAGES_ATTACK.length) {
                     this.phase = "floating";
-                    this.phaseEndsAt = Date.now() + 300;
+                    this.phaseEndsAt = Date.now() + 50;
                 }
             }
         }, 300);
@@ -205,7 +205,7 @@ class Endboss extends MovableObject {
         }
 
         const sharkieCanReply =
-            Date.now() - this.messageShownAt >= 7000;
+            Date.now() - this.messageShownAt >= 7500;
 
         if (sharkieCanReply) {
             stopBossBgm();
