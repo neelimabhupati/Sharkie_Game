@@ -29,7 +29,7 @@ class World {
     loseImage = new Image();
 
     collectedPoisonBubbles = 0;
-
+    finKeyWasPressed = false;
 
     coinSound = new Audio(
         "./images/Grafiken-Sharkie/7.Sound track/coin.mp3"
@@ -131,18 +131,8 @@ class World {
     run() {
         setInterval(() => {
 
-            // if (!this.gameStarted) return;
-            // check collisions
+            this.checkFinAttack();
             this.checkCollisions();
-            // if (
-            //     !this.gameLost &&
-            //     this.replyShownAt !== null &&
-            //     this.collectedPoisonBubbles < 4 &&
-            //     Date.now() - this.replyShownAt >= 1500
-            // ) {
-            //     this.gameLost = true;
-            //     return;
-            // }
 
             if (this.character.isDead()) {
                 if (!this.deadSoundStarted) {
@@ -163,6 +153,18 @@ class World {
             }
             this.checkThrowObject();
         }, 200);
+    }
+
+    checkFinAttack() {
+        if (!this.keyboard.SPACE) {
+            this.finKeyWasPressed = false;
+            return;
+        }
+
+        if (this.finKeyWasPressed) return;
+
+        this.finKeyWasPressed = true;
+        this.character.startFinAttack();
     }
 
     checkThrowObject() {
@@ -208,7 +210,31 @@ class World {
         for (let i = this.level.enemies.length - 1; i >= 0; i--) {
             const enemy = this.level.enemies[i];
 
-            if (enemy.dead || !this.character.isColliding(enemy)) {
+            if (enemy.dead) {
+                continue;
+            }
+
+            if (
+                !(enemy instanceof Endboss) &&
+                this.character.finAttackActive &&
+                !this.character.finAttackHits.has(enemy) &&
+                this.character.isFinSlapColliding(enemy)
+            ) {
+                this.character.finAttackHits.add(enemy);
+                enemy.die();
+
+                setTimeout(() => {
+                    const enemyIndex = this.level.enemies.indexOf(enemy);
+
+                    if (enemyIndex !== -1) {
+                        this.level.enemies.splice(enemyIndex, 1);
+                    }
+                }, 500);
+
+                continue;
+            }
+
+            if (!this.character.isColliding(enemy)) {
                 continue;
             }
 
