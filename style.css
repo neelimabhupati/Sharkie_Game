@@ -16,12 +16,15 @@ body {
 }
 
 h1 {
-    font-size: 64px;
-    letter-spacing: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 0 32px;
+    font-size: clamp(20px, 5vw, 64px);
+    letter-spacing: clamp(0px, 0.5vw, 5px);
+    white-space: nowrap;
     -webkit-text-stroke: 0.01px #7e431b;
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
     color: rgb(11, 11, 235);
-    margin-bottom: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -54,7 +57,7 @@ h1 {
     border: none;
     background: transparent;
     color: #fff;
-    font: 700 24px "Luckiest Guy",Arial, sans-serif;
+    font: 700 24px "Luckiest Guy", Arial, sans-serif;
     cursor: pointer;
     box-shadow: none;
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
@@ -68,9 +71,12 @@ h1 {
 }
 
 @keyframes replayDance {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translate(-50%, 0);
     }
+
     50% {
         transform: translate(-50%, -8px);
     }
@@ -92,7 +98,7 @@ h1 {
     border-radius: 10px;
     background: rgba(30, 5, 224, 0.053);
     color: #fff;
-    font: 700 24px "Luckiest Guy",Arial, sans-serif;
+    font: 700 24px "Luckiest Guy", Arial, sans-serif;
     cursor: pointer;
 }
 
@@ -171,32 +177,33 @@ h1 {
 
 .start-menu {
     position: absolute;
-    top: 150px;
+    width: 25%;
+    top: 50%;
     right: 5%;
-    transform: translateX(-50%);
+    transform: translateY(-50%);
     display: flex;
-    gap: 45px;
-
-    align-items: center;
     flex-direction: column;
     align-items: stretch;
+    gap: 18px;
 }
 
 .start-menu button {
     position: relative;
-    animation: gentleFloat 2.4s ease-in-out infinite;
     min-width: 180px;
     padding: 12px 20px;
     border: 2px solid #8fffea;
     border-radius: 14px;
     background: rgba(31, 5, 224, 0.88);
     color: #fff;
-    font: 700 22px "Luckiest Guy",Arial, Helvetica, sans-serif;
+    font: 400 22px "Luckiest Guy", Arial, Helvetica, sans-serif;
     white-space: nowrap;
     cursor: pointer;
     text-shadow: 0 2px 3px rgba(0, 0, 0, 0.6);
     box-shadow: 0 4px 12px rgba(0, 20, 60, 0.35);
     transition: background-color 180ms ease, transform 180ms ease;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
 }
 
 .start-menu button:hover {
@@ -213,7 +220,7 @@ h1 {
 
 /* for button movement animation */
 
-@keyframes gentleFloat {
+/* @keyframes gentleFloat {
 
     0%,
     100% {
@@ -227,6 +234,26 @@ h1 {
 
 .start-menu button:nth-child(even) {
     animation-delay: 0.10s;
+} */
+
+.attack-instructions {
+    width: min(100%, 500px);
+    margin: 8px auto 20px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    background: #0b2f53;
+    color: #ffffff;
+    text-align: left;
+    font: 18px/1.5 Arial, sans-serif;
+}
+
+.attack-instructions p {
+    margin: 8px 0;
+}
+
+.attack-instructions strong {
+    color: #8fffea;
+    font-weight: 400;
 }
 
 #game-info,
@@ -235,7 +262,9 @@ h1 {
     box-sizing: border-box;
     position: relative;
     width: min(85vw, 700px);
-    height: min(70vh, 520px);
+    height: auto;
+    max-height: 50vh;
+    /* padding: 16px; */
     overflow-y: hidden;
     margin: auto;
     border: 3px solid #8fffea;
@@ -243,7 +272,9 @@ h1 {
     padding: 24px;
     color: rgb(196, 193, 193);
     background: #073b66;
-    font: 18px "Luckiest Guy",Arial, sans-serif;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
 }
 
 #game-info::backdrop,
@@ -284,7 +315,7 @@ h1 {
 
 .info-item span {
     color: white;
-    font: bold 18px "Luckiest Guy",Arial, sans-serif;
+    font: bold 16px Arial, sans-serif;
 }
 
 .info-close {
@@ -324,23 +355,212 @@ h1 {
 
 @font-face {
     font-family: "Luckiest Guy";
-    src: url("./images/Grafiken-Sharkie/5.Font/Luckiest_Guy/LuckiestGuy-Regular.ttf")
-         format("truetype");
+    src: url("./images/Grafiken-Sharkie/5.Font/Luckiest_Guy/LuckiestGuy-Regular.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
 
 /* smartphones media query*/
-@media only screen and (max-width: 720px){
-    canvas{
+@media only screen and (max-width: 720px) {
+    canvas {
         width: 100%;
     }
 }
 
-/* smartphones */
+@media (max-width: 768px) {
+    body {
+        box-sizing: border-box;
+        justify-content: center;
+        min-height: 100svh;
+        padding: 12px 0;
+    }
 
-@media only screen and (max-width: 480px){
-    canvas{
-        height: 100vh;
+    h1 {
+        width: 100%;
+        margin: 0 0 12px;
+        padding: 0 8px;
+        box-sizing: border-box;
+        font-size: clamp(16px, 5vw, 36px);
+        letter-spacing: 0;
+        white-space: nowrap;
+    }
+
+    .start-screen-content {
+        width: min(94vw, 720px);
+    }
+
+    .start-menu {
+        width: clamp(130px, 35%, 230px);
+        top: 50%;
+        right: 4%;
+        gap: clamp(8px, 2vh, 18px);
+        transform: translateY(-50%);
+    }
+
+    .start-menu button {
+        width: 100%;
+        min-width: 0;
+        padding: 8px 4px;
+        font-size: clamp(12px, 3vw, 18px);
+    }
+
+    #game-container {
+        width: 100vw;
+    }
+
+    #canvas {
+        width: 100%;
+        height: auto;
+    }
+
+    #fullscreen-button,
+    #home-button,
+    #volume-button {
+        top: 6.25%;
+        width: clamp(26px, 8vw, 44px);
+        height: clamp(26px, 8vw, 44px);
+        font-size: clamp(14px, 4vw, 24px);
+        border-radius: clamp(6px, 2vw, 10px);
+    }
+
+    #fullscreen-button {
+        right: 3.6%;
+    }
+
+    #home-button {
+        right: 11.1%;
+    }
+
+    #volume-button {
+        right: 18.6%;
+    }
+
+    #home-volume-button {
+        top: 4%;
+        right: 4%;
+        width: clamp(26px, 8vw, 44px);
+        height: clamp(26px, 8vw, 44px);
+        font-size: clamp(14px, 4vw, 24px);
     }
 }
+
+.rotate-notice {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    /* .rotate-notice {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: #073b66;
+        color: #fff;
+        font: 16px/1.5 Arial, sans-serif;
+        text-align: center;
+    } */
+
+    .rotate-notice h2 {
+        margin: 12px 0 8px;
+        color: #8fffea;
+        font: bold 24px/1.2 Arial, sans-serif;
+    }
+
+    .rotate-notice p {
+        margin: 0;
+        color: #fff;
+    }
+
+    .rotate-icon {
+        color: #8fffea;
+        font: 56px/1 Arial, sans-serif;
+    }
+}
+
+ @media (min-width: 310px) and (max-width: 420px) {
+    .start-menu {
+        width: 140px;
+        top: 60%;
+        right: 4%;
+        gap: 6px;
+    }
+
+    .start-menu button {
+        left: 20px;
+        width: 120px;
+        height: 34px;
+        min-width: 0;
+        padding: 4px;
+        font-size: 12px;
+    }
+
+    #home-volume-button {
+        top: 8px;
+        right: 8px;
+        width: 14px;
+        height: 24px;
+        /* font-size: 8px; */
+    }
+} 
+
+#game-info,
+#impressum,
+#credits {
+    width: min(700px, calc(100vw - 24px));
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    padding: clamp(12px, 3vw, 24px);
+    border-width: clamp(1px, 0.5vw, 3px);
+    border-radius: clamp(10px, 3vw, 20px);
+    font-size: clamp(14px, 2.5vw, 18px);
+    line-height: 1.4;
+}
+
+#game-info .controls-image {
+    width: 100%;
+    max-height: clamp(70px, 22vh, 150px);
+    object-fit: contain;
+    margin-bottom: clamp(6px, 2vw, 12px);
+}
+
+#game-info .attack-instructions {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 8px auto 12px;
+    padding: clamp(8px, 2.5vw, 16px);
+    font-size: clamp(13px, 2.5vw, 18px);
+}
+
+#game-info .info-items {
+    gap: clamp(6px, 2vw, 16px);
+}
+
+#game-info .info-item {
+    min-height: clamp(38px, 10vw, 56px);
+    gap: clamp(3px, 1vw, 6px);
+}
+
+#game-info .info-item img {
+    width: clamp(24px, 7vw, 38px);
+    height: clamp(24px, 7vw, 38px);
+}
+
+#game-info .info-item span {
+    font-size: clamp(12px, 2.5vw, 16px);
+}
+
+.info-close {
+    top: clamp(4px, 1vw, 8px);
+    right: clamp(6px, 1.5vw, 10px);
+    font-size: clamp(20px, 5vw, 28px);
+}
+
+.credits-list p,
+#impressum p {
+    margin: clamp(8px, 2vw, 16px) 0;
+}
+
