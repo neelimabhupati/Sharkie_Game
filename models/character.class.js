@@ -18,6 +18,10 @@ class Character extends MovableObject {
     deadAnimationStartedAt = 0;
     deadAnimationFinished = false;
 
+    finAttackActive = false;
+    finAttackStartedAt = 0;
+    finAttackHits = new Set();
+
     IMAGES_WALKING = [
         './images/Grafiken-Sharkie/1.Sharkie/3.Swim/1.png',
         './images/Grafiken-Sharkie/1.Sharkie/3.Swim/2.png',
@@ -67,10 +71,16 @@ class Character extends MovableObject {
         './images/Grafiken-Sharkie/1.Sharkie/4.Attack/Bubble trap/For Whale/7.png',
         './images/Grafiken-Sharkie/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png'
     ];
+    IMAGES_FIN_SLAP = Array.from(
+        { length: 8 },
+        (_, index) =>
+            `./images/Grafiken-Sharkie/1.Sharkie/4.Attack/Fin slap/${index + 1}.png`
+    );
 
     constructor() {
         super();
         this.loadImage('./images/Grafiken-Sharkie/1.Sharkie/3.Swim/1.png'); this.loadImages(this.IMAGES_WALKING);
+        this.loadImages(this.IMAGES_FIN_SLAP);
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_BOSS_ATTACK);
         this.loadImages(this.IMAGES_HURT);
@@ -78,6 +88,36 @@ class Character extends MovableObject {
         this.animate();
     }
 
+    startFinAttack() {
+        if (this.finAttackActive || this.isDead()) return;
+
+        this.finAttackActive = true;
+        this.finAttackStartedAt = Date.now();
+        this.finAttackHits = new Set();
+    }
+
+    isFinSlapColliding(enemy) {
+        const attackBox = {
+            x: this.otherDirection
+                ? this.x + this.collisionOffsetX - 80
+                : this.x + this.collisionOffsetX + this.collisionWidth - 10,
+            y: this.y + this.collisionOffsetY,
+            width: 90,
+            height: this.collisionHeight
+        };
+
+        const enemyBox = {
+            x: enemy.x + (enemy.collisionOffsetX ?? 0),
+            y: enemy.y + (enemy.collisionOffsetY ?? 0),
+            width: enemy.collisionWidth ?? enemy.width,
+            height: enemy.collisionHeight ?? enemy.height
+        };
+
+        return attackBox.x < enemyBox.x + enemyBox.width &&
+            attackBox.x + attackBox.width > enemyBox.x &&
+            attackBox.y < enemyBox.y + enemyBox.height &&
+            attackBox.y + attackBox.height > enemyBox.y;
+    }
     playBossAttack() {
         this.bossAttackStartedAt = Date.now();
         this.bossAttackActive = true;
@@ -85,9 +125,12 @@ class Character extends MovableObject {
 
     animate() {
 
+        if (this.bossAttackActive || this.finAttackActive) {
+            return;
+        }
         setInterval(() => {
             // if (!this.world?.gameStarted) return;
-            
+
             if (this.bossAttackActive) {
                 return;
             }
@@ -140,6 +183,18 @@ class Character extends MovableObject {
                 return;
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
+
+            } else if (this.finAttackActive) {
+                const frameIndex = Math.floor(
+                    (Date.now() - this.finAttackStartedAt) / 80
+                );
+
+                if (frameIndex >= this.IMAGES_FIN_SLAP.length) {
+                    this.finAttackActive = false;
+                } else {
+                    const imagePath = this.IMAGES_FIN_SLAP[frameIndex];
+                    this.image = this.imageCache[imagePath];
+                }
 
             } else if (this.bossAttackActive) {
 
