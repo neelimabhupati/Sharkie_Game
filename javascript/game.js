@@ -271,3 +271,33 @@ document.addEventListener(
     },
     true
 );
+
+function setupTouchControl(buttonId, key) {
+    const button = document.getElementById(buttonId);
+
+    button.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        button.setPointerCapture(event.pointerId);
+        keyboard[key] = true;
+
+        if (key === "D" && world && world.replyShownAt !== null) {
+            world.dPressedAfterReply = true;
+        }
+    });
+
+    const releaseKey = (event) => {
+        event.preventDefault();
+        keyboard[key] = false;
+    };
+
+    button.addEventListener("pointerup", releaseKey);
+    button.addEventListener("pointercancel", releaseKey);
+    button.addEventListener("lostpointercapture", releaseKey);
+}
+
+setupTouchControl("touch-up", "UP");
+setupTouchControl("touch-left", "LEFT");
+setupTouchControl("touch-down", "DOWN");
+setupTouchControl("touch-right", "RIGHT");
+setupTouchControl("touch-tail-attack", "SPACE");
+setupTouchControl("touch-poison-bubble", "D");
