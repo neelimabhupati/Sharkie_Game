@@ -449,7 +449,7 @@ h1 {
 }
 
 @media screen and (max-width: 768px) {
-    /* .rotate-notice {
+    .rotate-notice {
         position: fixed;
         inset: 0;
         z-index: 9999;
@@ -462,7 +462,7 @@ h1 {
         color: #fff;
         font: 16px/1.5 Arial, sans-serif;
         text-align: center;
-    } */
+    }
 
     .rotate-notice h2 {
         margin: 12px 0 8px;
@@ -564,3 +564,79 @@ h1 {
     margin: clamp(8px, 2vw, 16px) 0;
 }
 
+#touch-controls {
+    display: none;
+}
+
+@media (max-width: 900px) and (orientation: landscape) and (pointer: coarse) {
+    #touch-controls {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        display: block;
+        pointer-events: none;
+        touch-action: none;
+    }
+
+    .touch-dpad {
+        position: absolute;
+        left: 3%;
+        bottom: 5%;
+        display: grid;
+        grid-template-columns: repeat(3, clamp(32px, 8vh, 52px));
+        grid-template-rows: repeat(2, clamp(32px, 8vh, 52px));
+        gap: clamp(3px, 1vh, 7px);
+    }
+
+    .touch-dpad button,
+    .touch-actions button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #8fffea;
+        border-radius: 12px;
+        background: rgba(7, 59, 102, 0.75);
+        color: white;
+        font: bold clamp(14px, 3vh, 20px) Arial, sans-serif;
+        touch-action: none;
+        pointer-events: auto;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .touch-up {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .touch-left {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .touch-down {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .touch-right {
+        grid-column: 3;
+        grid-row: 2;
+    }
+
+    .touch-actions {
+        position: absolute;
+        right: 3%;
+        bottom: 6%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .touch-actions button {
+        min-width: clamp(90px, 16vw, 130px);
+        min-height: clamp(36px, 9vh, 50px);
+        padding: 5px 8px;
+        font-size: clamp(11px, 2.5vh, 16px);
+    }
+}

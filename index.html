@@ -32,7 +32,7 @@
         <h2>Please rotate your device</h2>
         <p>Sharkie is best played in landscape mode.</p>
     </div>
-    
+
     <div id="start-screen">
         <html translate="no">
         <h1>Neelima's Sharkie Game</h1>
@@ -77,6 +77,19 @@
         <button id="volume-button" class="volume-button" type="button" onclick="toggleMute()" aria-label="Mute audio"
             title="Mute audio">🔊</button>
 
+        <div id="touch-controls" aria-label="Touch controls">
+            <div class="touch-dpad">
+                <button id="touch-up" class="touch-up" data-key="UP" aria-label="Move up">▲</button>
+                <button id="touch-left" class="touch-left" data-key="LEFT" aria-label="Move left">◀</button>
+                <button id="touch-down" class="touch-down" data-key="DOWN" aria-label="Move down">▼</button>
+                <button id="touch-right" class="touch-right" data-key="RIGHT" aria-label="Move right">▶</button>
+            </div>
+
+            <div class="touch-actions">
+                <button id="touch-tail-attack" data-key="SPACE">Tail slap</button>
+                <button id="touch-poison-bubble" data-key="D">Poison bubble</button>
+            </div>
+        </div>
     </div>
 
     <dialog id="game-info">
