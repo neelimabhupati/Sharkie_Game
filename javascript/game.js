@@ -151,25 +151,6 @@ function startBossBgm() {
     }
 }
 
-// function stopBossBgm() {
-//     if (!bossBgm.paused) {
-//         bossBgm.pause();
-//         bossBgm.currentTime = 0;
-//     }
-
-//     if (
-//         world &&
-//         world.replyShownAt === null &&
-//         !world.gameLost &&
-//         !world.gameWon &&
-//         gameBgm.paused
-//     ) {
-//         gameBgm.play().catch(error => {
-//             console.error("Could not resume game music:", error);
-//         });
-//     }
-// }
-
 function stopBossBgm() {
     pauseBossBgm();
     resumeGameBgm();
