@@ -75,188 +75,195 @@ class Endboss extends MovableObject {
     }
 
     animate() {
-        setInterval(() => {
-            if (this.defeated) return;
+        setInterval(() => this.updateBoss(), 300);
+    }
 
-            if (this.world?.replyShownAt !== null &&
-                this.world?.collectedPoisonBubbles < 4) {
-                const sharkie = this.world.character;
-                const targetX = sharkie.x + sharkie.width - 40;
+    updateBoss() {
+        if (this.defeated) return;
+        if (this.chaseSharkieIfNeeded()) return;
 
-                if (this.x > targetX) {
-                    this.x = Math.max(targetX, this.x - 12);
-                } else {
-                    this.world.gameLost = true;
-                    return;
-                }
+        if (this.phase === "waiting") {
+            if (this.world.character.x < 1800) return;
+            this.phase = "introduce";
+            this.introFrame = 0;
+        }
 
-                const path = this.IMAGES_ATTACK[this.attackFrame];
-                this.image = this.imageCache[path];
-                this.attackFrame = (this.attackFrame + 1) % this.IMAGES_ATTACK.length;
-                return;
-            }
+        if (this.phase === "introduce") return this.playIntroduction();
+        if (Date.now() < this.hurtUntil) return this.playAnimation(this.IMAGES_HURT);
+        if (this.phase === "floating") return this.updateFloating();
+        if (this.phase === "attack") this.updateAttack();
+    }
 
-            if (this.phase === "waiting") {
-                if (this.world?.character.x >= 1800) {
-                    this.phase = "introduce";
-                    this.introFrame = 0;
-                } else {
-                    return;
-                }
-            }
+    chaseSharkieIfNeeded() {
+        if (!this.world || this.world.replyShownAt === null) return false;
+        if (this.world.collectedPoisonBubbles >= 4) return false;
+        this.chaseSharkie();
+        return true;
+    }
 
-            if (this.phase === "introduce") {
-                const path = this.IMAGES_INTRODUCE[this.introFrame];
-                this.image = this.imageCache[path];
-                this.introFrame++;
+    chaseSharkie() {
+        const sharkie = this.world.character;
+        const targetX = sharkie.x + sharkie.width - 40;
 
-                if (this.introFrame >= this.IMAGES_INTRODUCE.length) {
-                    this.introFinished = true;
-                    this.phase = "floating";
-                    this.phaseEndsAt = Date.now() + 2000;
-                }
-                return;
-            }
+        if (this.x <= targetX) {
+            this.world.gameLost = true;
+            return;
+        }
 
-            if (Date.now() < this.hurtUntil) {
-                this.playAnimation(this.IMAGES_HURT);
-                return;
-            }
+        this.x = Math.max(targetX, this.x - 12);
+        this.playAttackFrame();
+    }
 
-            if (this.phase === "floating") {
-                this.playAnimation(this.IMAGES_WALKING);
+    playAttackFrame() {
+        const image = this.IMAGES_ATTACK[this.attackFrame];
+        this.image = this.imageCache[image];
+        this.attackFrame = (this.attackFrame + 1) % this.IMAGES_ATTACK.length;
+    }
 
-                if (Date.now() >= this.phaseEndsAt) {
-                    this.phase = "attack";
-                    this.attackFrame = 0;
-                    // this.phaseEndsAt = Date.now() + 4000;
-                }
-                return;
-            }
+    playIntroduction() {
+        const image = this.IMAGES_INTRODUCE[this.introFrame];
+        this.image = this.imageCache[image];
+        this.introFrame++;
 
-            if (this.phase === "attack") {
-                this.x = Math.max(2200, this.x - 3);
-                const path = this.IMAGES_ATTACK[this.attackFrame];
-                this.image = this.imageCache[path];
-                this.attackFrame++;
+        if (this.introFrame >= this.IMAGES_INTRODUCE.length) {
+            this.introFinished = true;
+            this.phase = "floating";
+            this.phaseEndsAt = Date.now() + 2000;
+        }
+    }
 
-                if (this.attackFrame >= this.IMAGES_ATTACK.length) {
-                    this.phase = "floating";
-                    this.phaseEndsAt = Date.now() + 50;
-                }
-            }
-        }, 300);
+    updateFloating() {
+        this.playAnimation(this.IMAGES_WALKING);
+        if (Date.now() < this.phaseEndsAt) return;
+        this.phase = "attack";
+        this.attackFrame = 0;
+    }
+
+    updateAttack() {
+        this.x = Math.max(2200, this.x - 3);
+        this.playAttackFrame();
+
+        if (this.attackFrame === 0) {
+            this.phase = "floating";
+            this.phaseEndsAt = Date.now() + 50;
+        }
     }
 
     hitByBubbles() {
-        if (this.defeated) {
-            return false;
-        }
+        if (this.defeated) return false;
 
         this.hits++;
         this.hurtUntil = Date.now() + 800;
 
-        if (this.hits >= 4) {
-            this.defeated = true;
+        if (this.hits < 4) return false;
 
-            let frame = 0;
-            const deathAnimation = setInterval(() => {
-                if (frame >= this.IMAGES_DEAD.length) {
-                    clearInterval(deathAnimation);
-                    return;
-                }
+        this.defeated = true;
+        this.startDeathAnimation();
+        return true;
+    }
 
-                this.image = this.imageCache[this.IMAGES_DEAD[frame]];
-                frame++;
-            }, 200);
+    startDeathAnimation() {
+        let frame = 0;
 
-            return true;
-        }
+        const timer = setInterval(() => {
+            if (frame >= this.IMAGES_DEAD.length) {
+                clearInterval(timer);
+                return;
+            }
 
-        return false;
+            this.showDeathFrame(frame);
+            frame++;
+        }, 200);
+    }
+
+    showDeathFrame(frame) {
+        const imagePath = this.IMAGES_DEAD[frame];
+        this.image = this.imageCache[imagePath];
     }
 
     draw(ctx) {
         super.draw(ctx);
+        if (!this.canShowDialogue()) return;
 
-        if (this.defeated || !this.world) return;
+        this.startDialogue();
+        this.logDialogue();
 
-        const screenX = this.x + this.world.camera_x;
-        const bossIsVisible =
-            screenX < this.world.canvas.width &&
-            screenX + this.width > 0;
-
-        if (!bossIsVisible) return;
-        if (!this.introFinished) return;
-
-        if (this.messageShownAt === null) {
-            startBossBgm();
-            this.messageShownAt = Date.now();
-
-        }
-
-        if (Date.now() - (this.lastDialogueLogAt || 0) >= 1000) {
-            console.log(
-                'Poison bubbles:', this.world.collectedPoisonBubbles,
-                'Seconds since boss message:',
-                Math.floor((Date.now() - this.messageShownAt) / 1000)
-            );
-            this.lastDialogueLogAt = Date.now();
-        }
-
-        const sharkieCanReply =
-            Date.now() - this.messageShownAt >= 7500;
-
-        if (sharkieCanReply) {
+        if (this.replyTimeIsOver()) {
             stopBossBgm();
             return;
         }
 
+        this.drawDialogueBubble(ctx);
+    }
+
+    canShowDialogue() {
+        if (this.defeated || !this.world) return false;
+        if (!this.introFinished) return false;
+        return this.isBossVisible();
+    }
+
+    isBossVisible() {
+        const screenX = this.x + this.world.camera_x;
+        return screenX < this.world.canvas.width &&
+            screenX + this.width > 0;
+    }
+
+    startDialogue() {
+        if (this.messageShownAt !== null) return;
+        startBossBgm();
+        this.messageShownAt = Date.now();
+    }
+
+    logDialogue() {
+        if (Date.now() - (this.lastDialogueLogAt || 0) < 1000) return;
+        console.log("Poison bubbles:", this.world.collectedPoisonBubbles);
+        this.lastDialogueLogAt = Date.now();
+    }
+
+    replyTimeIsOver() {
+        return Date.now() - this.messageShownAt >= 7500;
+    }
+
+    drawDialogueBubble(ctx) {
         const moveX = Math.sin(Date.now() / 250) * 5;
         const moveY = Math.sin(Date.now() / 400) * 8;
+        const x = this.x - 210 + moveX;
+        const y = this.y + 150 + moveY;
 
-        const bubbleX = this.x - 210 + moveX;
-        const bubbleY = this.y + 150 + moveY;
-        const bubbleWidth = 220;
-        const bubbleHeight = 70;
+        this.drawBubbleShape(ctx, x, y);
+        this.drawBubbleText(ctx, x, y);
+    }
 
+    drawBubbleShape(ctx, x, y) {
         ctx.fillStyle = "#ffffff";
         ctx.strokeStyle = "#073b66";
         ctx.lineWidth = 3;
+        this.drawBubbleTail(ctx, x, y);
+        this.drawBubbleOval(ctx, x, y);
+    }
 
+    drawBubbleTail(ctx, x, y) {
         ctx.beginPath();
-        ctx.moveTo(bubbleX + bubbleWidth - 50, bubbleY + bubbleHeight - 8);
-        ctx.lineTo(bubbleX + bubbleWidth - 20, bubbleY + bubbleHeight - 8);
-        ctx.lineTo(bubbleX + bubbleWidth + 15, bubbleY + bubbleHeight + 18);
+        ctx.moveTo(x + 170, y + 62);
+        ctx.lineTo(x + 200, y + 62);
+        ctx.lineTo(x + 235, y + 88);
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
+    }
 
+    drawBubbleOval(ctx, x, y) {
         ctx.beginPath();
-        ctx.ellipse(
-            bubbleX + bubbleWidth / 2,
-            bubbleY + bubbleHeight / 2,
-            bubbleWidth / 2,
-            bubbleHeight / 2,
-            0,
-            0,
-            Math.PI * 2
-        );
+        ctx.ellipse(x + 110, y + 35, 110, 35, 0, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
+    }
 
+    drawBubbleText(ctx, x, y) {
         ctx.fillStyle = "#073b66";
         ctx.font = "bold 16px Arial";
         ctx.textAlign = "center";
-        ctx.fillText(
-            "You can only defeat me",
-            bubbleX + bubbleWidth / 2,
-            bubbleY + 28
-        );
-        ctx.fillText(
-            "with 4 poison bubbles!",
-            bubbleX + bubbleWidth / 2,
-            bubbleY + 52
-        );
+        ctx.fillText("You can only defeat me", x + 110, y + 28);
+        ctx.fillText("with 4 poison bubbles!", x + 110, y + 52);
     }
 }
