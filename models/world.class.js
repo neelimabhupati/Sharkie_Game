@@ -207,138 +207,158 @@ class World {
     }
 
     checkCollisions() {
+        this.checkEnemyCollisions();
+        this.checkEndbossCollisions();
+        this.checkCoinCollisions();
+        this.checkBubbleCollisions();
+    }
+
+    checkEnemyCollisions() {
         for (let i = this.level.enemies.length - 1; i >= 0; i--) {
             const enemy = this.level.enemies[i];
-
-            if (enemy.dead) {
-                continue;
-            }
-
-            if (
-                !(enemy instanceof Endboss) &&
-                this.character.finAttackActive &&
-                !this.character.finAttackHits.has(enemy) &&
-                this.character.isFinSlapColliding(enemy)
-            ) {
-                this.character.finAttackHits.add(enemy);
-                enemy.die();
-
-                setTimeout(() => {
-                    const enemyIndex = this.level.enemies.indexOf(enemy);
-
-                    if (enemyIndex !== -1) {
-                        this.level.enemies.splice(enemyIndex, 1);
-                    }
-                }, 500);
-
-                continue;
-            }
-
-            if (!this.character.isColliding(enemy)) {
-                continue;
-            }
-
-            const characterBottom = this.character.y + this.character.height;
-            const isStomping =
-                enemy instanceof PufferFish &&
-                this.character.speedY < 0 &&
-                characterBottom < enemy.y + enemy.height / 2;
-
-            if (isStomping) {
+            if (enemy.dead) continue;
+            if (this.checkFinAttackCollision(enemy)) continue;
+            if (!this.character.isColliding(enemy)) continue;
+            if (this.isEnemyStomp(enemy)) {
                 enemy.die();
                 this.character.jump();
-
-                setTimeout(() => {
-                    const enemyIndex = this.level.enemies.indexOf(enemy);
-                    if (enemyIndex !== -1) {
-                        this.level.enemies.splice(enemyIndex, 1);
-                    }
-                }, 500);
-
+                this.removeEnemyAfterDelay(enemy);
             } else {
-                this.character.hit();
-                this.hurtSound.currentTime = 0;
-                this.hurtSound.play().catch(error => {
-                    console.error("Could not play hurt sound:", error);
-                });
-                this.lifeStatusBar.setPercentage(this.character.energy);
-            }
-        }
-
-        const endboss = this.level.enemies.find(
-            (enemy) => enemy instanceof Endboss
-        );
-
-        if (endboss && !endboss.defeated) {
-
-            for (let i = this.throwableObjects.length - 1; i >= 0; i--) {
-                const Bubbles = this.throwableObjects[i];
-
-                if (Bubbles.isColliding(endboss)) {
-                    this.throwableObjects.splice(i, 1);
-
-                    if (endboss.hitByBubbles()) {
-                        setTimeout(() => {
-                            const bossIndex = this.level.enemies.indexOf(endboss);
-
-                            if (bossIndex !== -1) {
-                                this.level.enemies.splice(bossIndex, 1);
-                            }
-                            setTimeout(() => {
-                                this.gameWon = true;
-                                startWinningBgm();
-                            }, 600);
-                        }, 1500);
-
-                        break;
-                    }
-                }
-            }
-        }
-
-        for (let i = this.level.coins.length - 1; i >= 0; i--) {
-            const coin = this.level.coins[i];
-
-            if (this.character.isColliding(coin)) {
-                this.level.coins.splice(i, 1);
-                this.collectedCoins++;
-                this.coinSound.currentTime = 0;
-                this.coinSound.play().catch(error => {
-                    console.error("Could not play coin sound:", error);
-                });
-
-                const percentage = (this.collectedCoins / this.totalCoins) * 100;
-                this.coinStatusBar.setPercentage(percentage);
-            }
-        }
-
-        for (let i = this.level.bubbles.length - 1; i >= 0; i--) {
-            const Bubbles = this.level.bubbles[i];
-
-            if (
-                this.character.isColliding(Bubbles) &&
-                this.collectedBubbles < this.totalBubbles
-            ) {
-                this.level.bubbles.splice(i, 1);
-                this.collectedBubbles++;
-
-                this.bubbleSound.currentTime = 0;
-                this.bubbleSound.play().catch(error => {
-                    console.error("Could not play bubble sound:", error);
-                });
-
-                if (Bubbles.isPoisoned) {
-                    this.collectedPoisonBubbles++;
-                    console.log('Poison bubbles collected:', this.collectedPoisonBubbles);
-                }
-
-                const percentage =
-                    (this.collectedBubbles / this.totalBubbles) * 100;
-
-                this.BubblesStatusBar.setPercentage(percentage);
+                this.damageCharacter();
             }
         }
     }
+
+    checkFinAttackCollision(enemy) {
+        if (enemy instanceof Endboss) return false;
+        if (!this.character.finAttackActive) return false;
+        if (this.character.finAttackHits.has(enemy)) return false;
+        if (!this.character.isFinSlapColliding(enemy)) return false;
+        this.character.finAttackHits.add(enemy);
+        enemy.die();
+        this.removeEnemyAfterDelay(enemy);
+        return true;
+    }
+
+    isEnemyStomp(enemy) {
+        const canStomp =
+            enemy instanceof PufferFish || enemy instanceof Jellyfish;
+
+        return canStomp && this.keyboard.DOWN;
+    }
+
+    removeEnemyAfterDelay(enemy) {
+        setTimeout(() => this.removeEnemy(enemy), 500);
+    }
+
+    removeEnemy(enemy) {
+        const index = this.level.enemies.indexOf(enemy);
+        if (index !== -1) this.level.enemies.splice(index, 1);
+    }
+
+    damageCharacter() {
+        this.character.hit();
+        this.playHurtSound();
+        this.lifeStatusBar.setPercentage(this.character.energy);
+    }
+
+    playHurtSound() {
+        this.hurtSound.currentTime = 0;
+        this.hurtSound.play().catch(error => {
+            console.error("Could not play hurt sound:", error);
+        });
+    }
+
+    checkEndbossCollisions() {
+        const boss = this.level.enemies.find(
+            enemy => enemy instanceof Endboss
+        );
+        if (!boss || boss.defeated) return;
+        for (let i = this.throwableObjects.length - 1; i >= 0; i--) {
+            if (this.hitEndbossWithBubble(boss, i)) break;
+        }
+    }
+
+    hitEndbossWithBubble(boss, index) {
+        const bubble = this.throwableObjects[index];
+        if (!bubble.isColliding(boss)) return false;
+        this.throwableObjects.splice(index, 1);
+        if (!boss.hitByBubbles()) return false;
+        setTimeout(() => this.finishEndboss(boss), 1500);
+        return true;
+    }
+
+    finishEndboss(boss) {
+        this.removeEnemy(boss);
+        setTimeout(() => this.showWinScreen(), 600);
+    }
+
+    showWinScreen() {
+        this.gameWon = true;
+        startWinningBgm();
+    }
+
+    checkCoinCollisions() {
+        for (let i = this.level.coins.length - 1; i >= 0; i--) {
+            const coin = this.level.coins[i];
+            if (this.character.isColliding(coin)) this.collectCoin(coin, i);
+        }
+    }
+
+    collectCoin(coin, index) {
+        this.level.coins.splice(index, 1);
+        this.collectedCoins++;
+        this.playCoinSound();
+        this.updateCoinStatus();
+    }
+
+    playCoinSound() {
+        this.coinSound.currentTime = 0;
+        this.coinSound.play().catch(error => {
+            console.error("Could not play coin sound:", error);
+        });
+    }
+
+    updateCoinStatus() {
+        const percentage = (this.collectedCoins / this.totalCoins) * 100;
+        this.coinStatusBar.setPercentage(percentage);
+    }
+
+    checkBubbleCollisions() {
+        for (let i = this.level.bubbles.length - 1; i >= 0; i--) {
+            const bubble = this.level.bubbles[i];
+            if (!this.character.isColliding(bubble)) continue;
+            if (this.collectedBubbles >= this.totalBubbles) continue;
+            this.collectBubble(bubble, i);
+        }
+    }
+
+    collectBubble(bubble, index) {
+        this.level.bubbles.splice(index, 1);
+        this.collectedBubbles++;
+        this.playBubbleSound();
+        this.countPoisonBubble(bubble);
+        this.updateBubbleStatus();
+    }
+
+    playBubbleSound() {
+        this.bubbleSound.currentTime = 0;
+        this.bubbleSound.play().catch(error => {
+            console.error("Could not play bubble sound:", error);
+        });
+    }
+
+    countPoisonBubble(bubble) {
+        if (!bubble.isPoisoned) return;
+        this.collectedPoisonBubbles++;
+        console.log("Poison bubbles collected:", this.collectedPoisonBubbles);
+    }
+
+    updateBubbleStatus() {
+        const percentage = (this.collectedBubbles / this.totalBubbles) * 100;
+        this.BubblesStatusBar.setPercentage(percentage);
+    }
+
     addObjecttoMap(Objects) {
         Objects.forEach((object) => {
             this.addToMap(object);

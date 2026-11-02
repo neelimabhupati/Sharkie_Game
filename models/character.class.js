@@ -22,6 +22,9 @@ class Character extends MovableObject {
     finAttackStartedAt = 0;
     finAttackHits = new Set();
 
+    bounceStartY = 0;
+    isBouncing = false;
+
     IMAGES_WALKING = [
         './images/Grafiken-Sharkie/1.Sharkie/3.Swim/1.png',
         './images/Grafiken-Sharkie/1.Sharkie/3.Swim/2.png',
@@ -122,6 +125,20 @@ class Character extends MovableObject {
         this.bossAttackStartedAt = Date.now();
         this.bossAttackActive = true;
     }
+    jump() {
+        this.bounceStartY = this.y;
+        this.speedY = 12;
+        this.isBouncing = true;
+    }
+
+    moveBounce() {
+        this.y -= this.speedY;
+        this.speedY -= 0.6;
+        if (this.y < this.bounceStartY) return;
+        this.y = this.bounceStartY;
+        this.speedY = 0;
+        this.isBouncing = false;
+    }
 
     animate() {
 
@@ -146,14 +163,25 @@ class Character extends MovableObject {
                 // this.walking_sound.play();
             }
 
-            if (this.world.keyboard.UP && this.y > 0) {
-                this.y -= this.speed;
-            }
+            // if (this.world.keyboard.UP && this.y > 0) {
+            //     this.y -= this.speed;
+            // }
 
-            if (this.world.keyboard.DOWN && this.y < 480 - this.height) {
-                this.y += this.speed;
-            }
+            // if (this.world.keyboard.DOWN && this.y < 480 - this.height) {
+            //     this.y += this.speed;
+            // }
 
+            if (this.isBouncing) {
+                this.moveBounce();
+            } else {
+                if (this.world.keyboard.UP && this.y > 0) {
+                    this.y -= this.speed;
+                }
+
+                if (this.world.keyboard.DOWN && this.y < 480 - this.height) {
+                    this.y += this.speed;
+                }
+            }
             // this.world.camera_x = -this.x + 100;
             this.world.camera_x = Math.min(0, -this.x + 100);
             // this.world.camera_x = -this.x + 100;
