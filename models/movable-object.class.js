@@ -22,7 +22,6 @@ class MovableObject extends DrawbleObject {
         return this.y < 180;
     }
 
-    // character.isColliding(chicken);
     isColliding(mo) {
         const thisX = this.x + (this.collisionOffsetX ?? 0);
         const thisY = this.y + (this.collisionOffsetY ?? 0);
