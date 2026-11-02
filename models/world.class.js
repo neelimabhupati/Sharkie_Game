@@ -51,8 +51,8 @@ class World {
         this.bubbleSound.volume = 0.2;
         this.hurtSound.volume = 0.3;
         this.deadSound.volume = 1;
-        this.draw();
         this.setWorld();
+        this.draw();
         this.run();
     }
 
