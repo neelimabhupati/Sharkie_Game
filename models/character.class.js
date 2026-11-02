@@ -72,11 +72,17 @@ class Character extends MovableObject {
         './images/Grafiken-Sharkie/1.Sharkie/4.Attack/Bubble trap/For Whale/7.png',
         './images/Grafiken-Sharkie/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png'
     ];
-    IMAGES_FIN_SLAP = Array.from(
-        { length: 8 },
-        (_, index) =>
-            `./images/Grafiken-Sharkie/1.Sharkie/4.Attack/Fin slap/${index + 1}.png`
-    );
+
+    IMAGES_FIN_SLAP = [
+        "./images/Grafiken-Sharkie/1.Sharkie/4.Attack/Fin slap/1.png",
+        "./images/Grafiken-Sharkie/1.Sharkie/4.Attack/Fin slap/2.png",
+        "./images/Grafiken-Sharkie/1.Sharkie/4.Attack/Fin slap/3.png",
+        "./images/Grafiken-Sharkie/1.Sharkie/4.Attack/Fin slap/4.png",
+        "./images/Grafiken-Sharkie/1.Sharkie/4.Attack/Fin slap/5.png",
+        "./images/Grafiken-Sharkie/1.Sharkie/4.Attack/Fin slap/6.png",
+        "./images/Grafiken-Sharkie/1.Sharkie/4.Attack/Fin slap/7.png",
+        "./images/Grafiken-Sharkie/1.Sharkie/4.Attack/Fin slap/8.png"
+    ];
 
     constructor() {
         super();
@@ -158,7 +164,7 @@ class Character extends MovableObject {
         this.bossAttackStartedAt = Date.now();
         this.bossAttackActive = true;
     }
-    
+
     jump() {
         this.bounceStartY = this.y;
         this.speedY = 12;
