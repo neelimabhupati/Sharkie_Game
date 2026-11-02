@@ -81,17 +81,36 @@ class Endboss extends MovableObject {
     updateBoss() {
         if (this.defeated) return;
         if (this.chaseSharkieIfNeeded()) return;
+        if (this.waitForSharkie()) return;
+        if (this.updateIntroduction()) return;
+        if (this.playHurtIfNeeded()) return;
+        this.updateCurrentPhase();
+    }
 
-        if (this.phase === "waiting") {
-            if (this.world.character.x < 1800) return;
-            this.phase = "introduce";
-            this.introFrame = 0;
-        }
+    updateIntroduction() {
+        if (this.phase !== "introduce") return false;
+        this.playIntroduction();
+        return true;
+    }
 
-        if (this.phase === "introduce") return this.playIntroduction();
-        if (Date.now() < this.hurtUntil) return this.playAnimation(this.IMAGES_HURT);
-        if (this.phase === "floating") return this.updateFloating();
+    playHurtIfNeeded() {
+        if (Date.now() >= this.hurtUntil) return false;
+        this.playAnimation(this.IMAGES_HURT);
+        return true;
+    }
+
+    updateCurrentPhase() {
+        if (this.phase === "floating") this.updateFloating();
         if (this.phase === "attack") this.updateAttack();
+    }
+
+    waitForSharkie() {
+        if (this.phase !== "waiting") return false;
+        if (this.world.character.x < 1800) return true;
+
+        this.phase = "introduce";
+        this.introFrame = 0;
+        return false;
     }
 
     chaseSharkieIfNeeded() {
