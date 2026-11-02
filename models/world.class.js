@@ -97,49 +97,110 @@ class World {
         });
     }
 
+    // draw() {
+    //     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    //     if (this.gameWon || this.gameLost) {
+    //         document.getElementById('replay-button').style.display =
+    //             (this.gameWon || this.gameLost) ? 'block' : 'none';
+
+    //         const resultImage = this.gameWon ? this.winImage : this.loseImage;
+
+
+    //         if (resultImage.complete && resultImage.naturalWidth > 0) {
+    //             this.ctx.drawImage(
+    //                 resultImage,
+    //                 0,
+    //                 0,
+    //                 this.canvas.width,
+    //                 this.canvas.height
+    //             );
+    //         }
+
+    //         requestAnimationFrame(() => this.draw());
+    //         return;
+    //     }
+
+    //     this.ctx.translate(this.camera_x, 0);
+    //     this.addObjecttoMap(this.level.backgroundObjects);
+
+    //     this.ctx.translate(-this.camera_x, 0); //back
+
+    //     //space for fixed object
+    //     this.addToMap(this.lifeStatusBar);
+    //     this.addToMap(this.coinStatusBar);
+    //     this.addToMap(this.BubblesStatusBar);
+    //     this.ctx.translate(this.camera_x, 0); //forward
+
+    //     this.addToMap(this.character);
+    //     this.addObjecttoMap(this.level.enemies);
+    //     this.addObjecttoMap(this.level.coins);
+    //     this.addObjecttoMap(this.level.bubbles);
+    //     this.addObjecttoMap(this.throwableObjects);
+
+    //     this.ctx.translate(-this.camera_x, 0);
+    //     // draw wird immer wieder aufrufen, damit die Position des Charakters immer wieder neu gezeichnet wird.
+    //     requestAnimationFrame(() => this.draw());
+    // }
+
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.clearCanvas();
 
-        if (this.gameWon || this.gameLost) {
-            document.getElementById('replay-button').style.display =
-                (this.gameWon || this.gameLost) ? 'block' : 'none';
-
-            const resultImage = this.gameWon ? this.winImage : this.loseImage;
-
-
-            if (resultImage.complete && resultImage.naturalWidth > 0) {
-                this.ctx.drawImage(
-                    resultImage,
-                    0,
-                    0,
-                    this.canvas.width,
-                    this.canvas.height
-                );
-            }
-
-            requestAnimationFrame(() => this.draw());
+        if (this.drawResultScreen()) {
+            this.requestNextFrame();
             return;
         }
 
+        this.drawGameScene();
+        this.requestNextFrame();
+    }
+
+    clearCanvas() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    drawResultScreen() {
+        if (!this.gameWon && !this.gameLost) return false;
+        document.getElementById("replay-button").style.display = "block";
+        const image = this.gameWon ? this.winImage : this.loseImage;
+        this.drawResultImage(image);
+        return true;
+    }
+
+    drawResultImage(image) {
+        if (!image.complete || image.naturalWidth === 0) return;
+        this.ctx.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    drawGameScene() {
+        this.drawBackground();
+        this.drawStatusBars();
+        this.drawGameObjects();
+    }
+
+    drawBackground() {
         this.ctx.translate(this.camera_x, 0);
         this.addObjecttoMap(this.level.backgroundObjects);
+        this.ctx.translate(-this.camera_x, 0);
+    }
 
-        this.ctx.translate(-this.camera_x, 0); //back
-
-        //space for fixed object
+    drawStatusBars() {
         this.addToMap(this.lifeStatusBar);
         this.addToMap(this.coinStatusBar);
         this.addToMap(this.BubblesStatusBar);
-        this.ctx.translate(this.camera_x, 0); //forward
+    }
 
+    drawGameObjects() {
+        this.ctx.translate(this.camera_x, 0);
         this.addToMap(this.character);
         this.addObjecttoMap(this.level.enemies);
         this.addObjecttoMap(this.level.coins);
         this.addObjecttoMap(this.level.bubbles);
         this.addObjecttoMap(this.throwableObjects);
-
         this.ctx.translate(-this.camera_x, 0);
-        // draw wird immer wieder aufrufen, damit die Position des Charakters immer wieder neu gezeichnet wird.
+    }
+
+    requestNextFrame() {
         requestAnimationFrame(() => this.draw());
     }
 
