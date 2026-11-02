@@ -2,32 +2,23 @@ class World {
 
     character = new Character();
     level = level1;
-
     canvas;
     ctx;
     keyboard;
-
-    // gameStarted = false;
-
     camera_x = 0;
     lifeStatusBar = new LifeStatusBar();
     coinStatusBar = new CoinStatusBar();
-
     collectedCoins = 0;
     totalCoins = this.level.coins.length;
-
     collectedBubbles = 0;
     totalBubbles = this.level.bubbles.length;
-
     BubblesStatusBar = new BubblesStatusBar();
     throwableObjects = [];
     throwKeyWasPressed = false;
-
     gameWon = false;
     winImage = new Image();
     gameLost = false;
     loseImage = new Image();
-
     collectedPoisonBubbles = 0;
     finKeyWasPressed = false;
 
@@ -65,23 +56,6 @@ class World {
         this.run();
     }
 
-    // setWorld() {
-    //     this.character.world = this;
-    //     this.character.animate();
-
-    //     const endboss = this.level.enemies.find(
-    //         enemy => enemy instanceof Endboss
-    //     );
-
-    //     this.level.enemies.forEach(enemy => {
-    //         enemy.world = this;
-    //     });
-
-    //     if (endboss) {
-    //         endboss.world = this;
-    //     }
-    // }
-
     setWorld() {
         this.setCharacterWorld();
         this.setEnemiesWorld();
@@ -96,7 +70,7 @@ class World {
             enemy.world = this;
         });
     }
-    
+
     draw() {
         this.clearCanvas();
 
@@ -158,33 +132,6 @@ class World {
         requestAnimationFrame(() => this.draw());
     }
 
-    // run() {
-    //     setInterval(() => {
-
-    //         this.checkFinAttack();
-    //         this.checkCollisions();
-
-    //         if (this.character.isDead()) {
-    //             if (!this.deadSoundStarted) {
-    //                 this.deadSoundStarted = true;
-    //                 // stopGameBgm();
-    //                 stopAllBgm();
-    //                 this.deadSound.currentTime = 0;
-    //                 this.deadSound.play().catch(error => {
-    //                     console.error("Could not play dead sound:", error);
-    //                 });
-    //             }
-
-    //             if (this.character.deadAnimationFinished) {
-    //                 stopGameBgm();
-    //                 this.gameLost = true;
-    //             }
-    //             return;
-    //         }
-    //         this.checkThrowObject();
-    //     }, 200);
-    // }
-
     run() {
         setInterval(() => this.runGameStep(), 200);
     }
@@ -210,6 +157,7 @@ class World {
         if (this.deadSoundStarted) return;
         this.deadSoundStarted = true;
         stopAllBgm();
+        this.stopHurtSound();
         this.deadSound.currentTime = 0;
         this.deadSound.play().catch(error => {
             console.error("Could not play dead sound:", error);
@@ -279,18 +227,26 @@ class World {
 
     checkEnemyCollisions() {
         for (let i = this.level.enemies.length - 1; i >= 0; i--) {
-            const enemy = this.level.enemies[i];
-            if (enemy.dead) continue;
-            if (this.checkFinAttackCollision(enemy)) continue;
-            if (!this.character.isColliding(enemy)) continue;
-            if (this.isEnemyStomp(enemy)) {
-                enemy.die();
-                this.character.jump();
-                this.removeEnemyAfterDelay(enemy);
-            } else {
-                this.damageCharacter();
-            }
+            this.handleEnemyCollision(this.level.enemies[i]);
         }
+    }
+
+    handleEnemyCollision(enemy) {
+        if (enemy.dead) return;
+        if (this.checkFinAttackCollision(enemy)) return;
+        if (!this.character.isColliding(enemy)) return;
+        this.handleEnemyHit(enemy);
+    }
+
+    handleEnemyHit(enemy) {
+        if (!this.isEnemyStomp(enemy)) {
+            this.damageCharacter();
+            return;
+        }
+
+        enemy.die();
+        this.character.jump();
+        this.removeEnemyAfterDelay(enemy);
     }
 
     checkFinAttackCollision(enemy) {
@@ -321,9 +277,22 @@ class World {
     }
 
     damageCharacter() {
+        if (this.character.isDead() || this.character.isHurt()) return;
+
         this.character.hit();
-        this.playHurtSound();
         this.lifeStatusBar.setPercentage(this.character.energy);
+
+        if (this.character.isDead()) {
+            this.stopHurtSound();
+            return;
+        }
+
+        this.playHurtSound();
+    }
+
+    stopHurtSound() {
+        this.hurtSound.pause();
+        this.hurtSound.currentTime = 0;
     }
 
     playHurtSound() {

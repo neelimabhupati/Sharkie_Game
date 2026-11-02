@@ -44,6 +44,7 @@ function init() {
 }
 
 function startGame() {
+    document.getElementById("replay-button").style.display = "none";
     document.getElementById("start-screen").style.display = "none";
     document.getElementById("game-container").style.display = "block";
     document.getElementById("canvas").style.display = "block";
