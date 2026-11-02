@@ -54,7 +54,6 @@ function startGame() {
     keyboard = new Keyboard();
     initLevel();
     init();
-    // world.gameStarted = true;
     applyMuteToWorldSounds();
 
     gameBgm.currentTime = 0;
