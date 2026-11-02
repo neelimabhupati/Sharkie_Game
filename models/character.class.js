@@ -7,13 +7,11 @@ class Character extends MovableObject {
     bossAttackStartedAt = 0;
     bossAttackActive = false;
     world;
-    // walking_sound = new Audio('./audio/walking.mp3');
 
     collisionOffsetX = 45;
     collisionOffsetY = 115;
     collisionWidth = 150;
     collisionHeight = 75;
-
 
     deadAnimationStartedAt = 0;
     deadAnimationFinished = false;
@@ -231,121 +229,6 @@ class Character extends MovableObject {
         }
     }
 
-    // draw(ctx) {
-    //     super.draw(ctx);
-
-    //     const endboss = this.world?.level.enemies.find(
-    //         enemy => enemy instanceof Endboss
-    //     );
-
-    //     if (
-    //         this.otherDirection || !endboss ||
-    //         endboss.messageShownAt === null ||
-    //         Date.now() - endboss.messageShownAt < 2000
-
-    //     ) {
-    //         // console.log('Poison bubbles collected:', this.collectedPoisonBubbles);
-    //         return;
-    //     }
-
-    //     if (this.world.dPressedAfterReply) {
-    //         return;
-    //     }
-
-    //     const hasEnoughPoisonBubbles =
-    //         this.world.collectedPoisonBubbles >= 4;
-
-    //     if (this.world.replyShownAt === null) {
-    //         this.world.replyShownAt = Date.now();
-    //         this.world.dPressedAfterReply = false;
-
-    //         if (hasEnoughPoisonBubbles) {
-    //             startYesHaveBgm();
-
-    //         } else {
-    //             stopAllBgm();
-    //             this.world.deadSound.currentTime = 0;
-    //             this.world.deadSound.play().catch(error => {
-    //                 console.error("Could not play loss sound:", error);
-    //             });
-    //         }
-    //     }
-    //     const showHint =
-    //         hasEnoughPoisonBubbles &&
-    //         Date.now() - this.world.replyShownAt >= 3000 &&
-    //         !this.world.dPressedAfterReply;
-
-    //     const moveY = Math.sin(Date.now() / 300) * 4;
-    //     const bubbleX = this.x + this.width - 110;
-    //     const bubbleY = this.y + 20 + moveY;
-    //     const bubbleWidth = 220;
-    //     const bubbleHeight = 70;
-
-    //     ctx.fillStyle = '#ffffff';
-    //     ctx.strokeStyle = '#073b66';
-    //     ctx.lineWidth = 3;
-
-    //     // Sharkie వైపు చూపించే speech tail
-    //     ctx.beginPath();
-    //     ctx.moveTo(bubbleX + 30, bubbleY + bubbleHeight - 5);
-    //     ctx.lineTo(bubbleX + 65, bubbleY + bubbleHeight - 5);
-    //     ctx.lineTo(bubbleX + 5, bubbleY + bubbleHeight + 22);
-    //     ctx.closePath();
-    //     ctx.fill();
-    //     ctx.stroke();
-
-    //     ctx.beginPath();
-    //     ctx.ellipse(
-    //         bubbleX + bubbleWidth / 2,
-    //         bubbleY + bubbleHeight / 2,
-    //         bubbleWidth / 2,
-    //         bubbleHeight / 2,
-    //         0,
-    //         0,
-    //         Math.PI * 2
-    //     );
-    //     ctx.fill();
-    //     ctx.stroke();
-
-    //     ctx.fillStyle = '#073b66';
-    //     ctx.font = 'bold 16px Arial';
-    //     ctx.textAlign = 'center';
-
-    //     if (showHint) {
-    //         ctx.fillText(
-    //             'Hint: Press D 4 times',
-    //             bubbleX + bubbleWidth / 2,
-    //             bubbleY + 29
-    //         );
-    //         ctx.fillText(
-    //             'to defeat the Endboss!',
-    //             bubbleX + bubbleWidth / 2,
-    //             bubbleY + 53
-    //         );
-    //     } else if (hasEnoughPoisonBubbles) {
-    //         ctx.fillText(
-    //             'Yes, I have!',
-    //             bubbleX + bubbleWidth / 2,
-    //             bubbleY + 29
-    //         );
-    //         ctx.fillText(
-    //             'Rest in peace!',
-    //             bubbleX + bubbleWidth / 2,
-    //             bubbleY + 53
-    //         );
-    //     } else {
-    //         ctx.fillText(
-    //             "No, I don't have :( ",
-    //             bubbleX + bubbleWidth / 2,
-    //             bubbleY + bubbleHeight / 2 + 6
-    //         );
-    //         // ctx.fillText(
-    //         //     'I need 4 poison bubbles!',
-    //         //     bubbleX + bubbleWidth / 2,
-    //         //     bubbleY + 53
-    //         // );
-    //     }
-    // }
     draw(ctx) {
         super.draw(ctx);
         const endboss = this.getEndboss();

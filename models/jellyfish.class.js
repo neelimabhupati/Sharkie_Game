@@ -23,6 +23,7 @@ class Jellyfish extends MovableObject {
         this.dead = true;
         this.speed = 0;
     }
+    
     animate() {
         setInterval(() => {
             if (this.dead) return;
