@@ -50,17 +50,27 @@ class Endboss extends MovableObject {
         './images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/Dead/Mesa de trabajo 2 copia 10.png'
     ];
 
-    IMAGES_INTRODUCE = Array.from(
-        { length: 10 },
-        (_, index) =>
-            `./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/1.Introduce/${index + 1}.png`
-    );
+    IMAGES_INTRODUCE = [
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/1.Introduce/1.png",
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/1.Introduce/2.png",
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/1.Introduce/3.png",
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/1.Introduce/4.png",
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/1.Introduce/5.png",
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/1.Introduce/6.png",
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/1.Introduce/7.png",
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/1.Introduce/8.png",
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/1.Introduce/9.png",
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/1.Introduce/10.png"
+    ];
 
-    IMAGES_ATTACK = Array.from(
-        { length: 6 },
-        (_, index) =>
-            `./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/Attack/${index + 1}.png`
-    );
+    IMAGES_ATTACK = [
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/Attack/1.png",
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/Attack/2.png",
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/Attack/3.png",
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/Attack/4.png",
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/Attack/5.png",
+        "./images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/Attack/6.png"
+    ];
 
     constructor() {
         super();
