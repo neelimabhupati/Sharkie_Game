@@ -29,19 +29,34 @@ class MovableObject extends DrawbleObject {
     }
 
     getCollisionBox(object) {
-        const offsetX = object.collisionOffsetX != null
-            ? object.collisionOffsetX : 0;
-        const offsetY = object.collisionOffsetY != null
-            ? object.collisionOffsetY : 0;
-
         return {
-            x: object.x + offsetX,
-            y: object.y + offsetY,
-            width: object.collisionWidth != null
-                ? object.collisionWidth : object.width,
-            height: object.collisionHeight != null
-                ? object.collisionHeight : object.height
+            x: this.getCollisionX(object),
+            y: this.getCollisionY(object),
+            width: this.getCollisionWidth(object),
+            height: this.getCollisionHeight(object)
         };
+    }
+
+    getCollisionX(object) {
+        const offset = object.collisionOffsetX != null
+            ? object.collisionOffsetX : 0;
+        return object.x + offset;
+    }
+
+    getCollisionY(object) {
+        const offset = object.collisionOffsetY != null
+            ? object.collisionOffsetY : 0;
+        return object.y + offset;
+    }
+
+    getCollisionWidth(object) {
+        return object.collisionWidth != null
+            ? object.collisionWidth : object.width;
+    }
+
+    getCollisionHeight(object) {
+        return object.collisionHeight != null
+            ? object.collisionHeight : object.height;
     }
 
     boxesOverlap(box1, box2) {
