@@ -204,31 +204,62 @@ class World {
         requestAnimationFrame(() => this.draw());
     }
 
+    // run() {
+    //     setInterval(() => {
+
+    //         this.checkFinAttack();
+    //         this.checkCollisions();
+
+    //         if (this.character.isDead()) {
+    //             if (!this.deadSoundStarted) {
+    //                 this.deadSoundStarted = true;
+    //                 // stopGameBgm();
+    //                 stopAllBgm();
+    //                 this.deadSound.currentTime = 0;
+    //                 this.deadSound.play().catch(error => {
+    //                     console.error("Could not play dead sound:", error);
+    //                 });
+    //             }
+
+    //             if (this.character.deadAnimationFinished) {
+    //                 stopGameBgm();
+    //                 this.gameLost = true;
+    //             }
+    //             return;
+    //         }
+    //         this.checkThrowObject();
+    //     }, 200);
+    // }
+
     run() {
-        setInterval(() => {
+        setInterval(() => this.runGameStep(), 200);
+    }
 
-            this.checkFinAttack();
-            this.checkCollisions();
+    runGameStep() {
+        this.checkFinAttack();
+        this.checkCollisions();
+        if (this.handleCharacterDeath()) return;
+        this.checkThrowObject();
+    }
 
-            if (this.character.isDead()) {
-                if (!this.deadSoundStarted) {
-                    this.deadSoundStarted = true;
-                    // stopGameBgm();
-                    stopAllBgm();
-                    this.deadSound.currentTime = 0;
-                    this.deadSound.play().catch(error => {
-                        console.error("Could not play dead sound:", error);
-                    });
-                }
+    handleCharacterDeath() {
+        if (!this.character.isDead()) return false;
+        this.playDeadSoundOnce();
+        if (this.character.deadAnimationFinished) {
+            stopGameBgm();
+            this.gameLost = true;
+        }
+        return true;
+    }
 
-                if (this.character.deadAnimationFinished) {
-                    stopGameBgm();
-                    this.gameLost = true;
-                }
-                return;
-            }
-            this.checkThrowObject();
-        }, 200);
+    playDeadSoundOnce() {
+        if (this.deadSoundStarted) return;
+        this.deadSoundStarted = true;
+        stopAllBgm();
+        this.deadSound.currentTime = 0;
+        this.deadSound.play().catch(error => {
+            console.error("Could not play dead sound:", error);
+        });
     }
 
     checkFinAttack() {
@@ -243,43 +274,85 @@ class World {
         this.character.startFinAttack();
     }
 
+    // checkThrowObject() {
+    //     if (!this.keyboard.D) {
+    //         this.throwKeyWasPressed = false;
+    //         return;
+    //     }
+
+    //     // D key press-ku okka Bubbles maatrame throw avuthundi.
+    //     if (this.throwKeyWasPressed) {
+    //         return;
+    //     }
+
+    //     this.throwKeyWasPressed = true;
+
+    //     // Bubbles collect chesi unte maatrame throw cheyyali.
+    //     if (this.collectedBubbles > 0) {
+    //         this.character.playBossAttack();
+    //         const direction = this.character.otherDirection ? -1 : 1;
+    //         const BubblesX = direction === 1
+    //             ? this.character.x + this.character.width - 20
+    //             : this.character.x - 60;
+    //         const BubblesY = this.character.y + 120;
+
+    //         setTimeout(() => {
+    //             const bubble = new ThrowableObject(
+    //                 BubblesX,
+    //                 BubblesY,
+    //                 direction
+    //             );
+    //             this.throwableObjects.push(bubble);
+    //         }, 700);
+
+    //         this.collectedBubbles--;
+
+    //         const percentage =
+    //             (this.collectedBubbles / this.totalBubbles) * 100;
+    //         this.BubblesStatusBar.setPercentage(percentage);
+    //     }
+    // }
+
     checkThrowObject() {
         if (!this.keyboard.D) {
             this.throwKeyWasPressed = false;
             return;
         }
-
-        // D key press-ku okka Bubbles maatrame throw avuthundi.
-        if (this.throwKeyWasPressed) {
-            return;
-        }
-
+        if (this.throwKeyWasPressed) return;
         this.throwKeyWasPressed = true;
+        this.throwBubbleIfAvailable();
+    }
 
-        // Bubbles collect chesi unte maatrame throw cheyyali.
-        if (this.collectedBubbles > 0) {
-            this.character.playBossAttack();
-            const direction = this.character.otherDirection ? -1 : 1;
-            const BubblesX = direction === 1
-                ? this.character.x + this.character.width - 20
-                : this.character.x - 60;
-            const BubblesY = this.character.y + 120;
+    throwBubbleIfAvailable() {
+        if (this.collectedBubbles <= 0) return;
+        this.character.playBossAttack();
+        const position = this.getBubblePosition();
+        this.addThrowableBubble(position);
+        this.useCollectedBubble();
+    }
 
-            setTimeout(() => {
-                const bubble = new ThrowableObject(
-                    BubblesX,
-                    BubblesY,
-                    direction
-                );
-                this.throwableObjects.push(bubble);
-            }, 700);
+    getBubblePosition() {
+        const direction = this.character.otherDirection ? -1 : 1;
+        const x = direction === 1
+            ? this.character.x + this.character.width - 20
+            : this.character.x - 60;
+        return { x, y: this.character.y + 120, direction };
+    }
 
-            this.collectedBubbles--;
+    addThrowableBubble(position) {
+        setTimeout(() => {
+            const bubble = new ThrowableObject(
+                position.x, position.y, position.direction
+            );
+            this.throwableObjects.push(bubble);
+        }, 700);
+    }
 
-            const percentage =
-                (this.collectedBubbles / this.totalBubbles) * 100;
-            this.BubblesStatusBar.setPercentage(percentage);
-        }
+    useCollectedBubble() {
+        this.collectedBubbles--;
+        const percentage =
+            (this.collectedBubbles / this.totalBubbles) * 100;
+        this.BubblesStatusBar.setPercentage(percentage);
     }
 
     checkCollisions() {
