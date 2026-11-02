@@ -118,19 +118,33 @@ class Character extends MovableObject {
 
     getEnemyBox(enemy) {
         return {
-            x: enemy.x + (
-                enemy.collisionOffsetX != null ? enemy.collisionOffsetX : 0
-            ),
-            y: enemy.y + (
-                enemy.collisionOffsetY != null ? enemy.collisionOffsetY : 0
-            ),
-            width: enemy.collisionWidth != null
-                ? enemy.collisionWidth
-                : enemy.width,
-            height: enemy.collisionHeight != null
-                ? enemy.collisionHeight
-                : enemy.height
+            x: this.getEnemyX(enemy),
+            y: this.getEnemyY(enemy),
+            width: this.getEnemyWidth(enemy),
+            height: this.getEnemyHeight(enemy)
         };
+    }
+
+    getEnemyX(enemy) {
+        const offset = enemy.collisionOffsetX != null
+            ? enemy.collisionOffsetX : 0;
+        return enemy.x + offset;
+    }
+
+    getEnemyY(enemy) {
+        const offset = enemy.collisionOffsetY != null
+            ? enemy.collisionOffsetY : 0;
+        return enemy.y + offset;
+    }
+
+    getEnemyWidth(enemy) {
+        return enemy.collisionWidth != null
+            ? enemy.collisionWidth : enemy.width;
+    }
+
+    getEnemyHeight(enemy) {
+        return enemy.collisionHeight != null
+            ? enemy.collisionHeight : enemy.height;
     }
 
     boxesOverlap(box1, box2) {
@@ -139,10 +153,12 @@ class Character extends MovableObject {
             box1.y < box2.y + box2.height &&
             box1.y + box1.height > box2.y;
     }
+
     playBossAttack() {
         this.bossAttackStartedAt = Date.now();
         this.bossAttackActive = true;
     }
+    
     jump() {
         this.bounceStartY = this.y;
         this.speedY = 12;
