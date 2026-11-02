@@ -2,7 +2,7 @@ class Character extends MovableObject {
     height = 250;
     width = 240;
     y = 80;
-    speed = 3;
+    speed = 5;
 
     bossAttackStartedAt = 0;
     bossAttackActive = false;

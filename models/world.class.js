@@ -65,21 +65,36 @@ class World {
         this.run();
     }
 
+    // setWorld() {
+    //     this.character.world = this;
+    //     this.character.animate();
+
+    //     const endboss = this.level.enemies.find(
+    //         enemy => enemy instanceof Endboss
+    //     );
+
+    //     this.level.enemies.forEach(enemy => {
+    //         enemy.world = this;
+    //     });
+
+    //     if (endboss) {
+    //         endboss.world = this;
+    //     }
+    // }
+
     setWorld() {
+        this.setCharacterWorld();
+        this.setEnemiesWorld();
+    }
+
+    setCharacterWorld() {
         this.character.world = this;
-        this.character.animate();
+    }
 
-        const endboss = this.level.enemies.find(
-            enemy => enemy instanceof Endboss
-        );
-
+    setEnemiesWorld() {
         this.level.enemies.forEach(enemy => {
             enemy.world = this;
         });
-
-        if (endboss) {
-            endboss.world = this;
-        }
     }
 
     draw() {
