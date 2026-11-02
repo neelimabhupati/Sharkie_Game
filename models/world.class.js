@@ -96,53 +96,7 @@ class World {
             enemy.world = this;
         });
     }
-
-    // draw() {
-    //     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    //     if (this.gameWon || this.gameLost) {
-    //         document.getElementById('replay-button').style.display =
-    //             (this.gameWon || this.gameLost) ? 'block' : 'none';
-
-    //         const resultImage = this.gameWon ? this.winImage : this.loseImage;
-
-
-    //         if (resultImage.complete && resultImage.naturalWidth > 0) {
-    //             this.ctx.drawImage(
-    //                 resultImage,
-    //                 0,
-    //                 0,
-    //                 this.canvas.width,
-    //                 this.canvas.height
-    //             );
-    //         }
-
-    //         requestAnimationFrame(() => this.draw());
-    //         return;
-    //     }
-
-    //     this.ctx.translate(this.camera_x, 0);
-    //     this.addObjecttoMap(this.level.backgroundObjects);
-
-    //     this.ctx.translate(-this.camera_x, 0); //back
-
-    //     //space for fixed object
-    //     this.addToMap(this.lifeStatusBar);
-    //     this.addToMap(this.coinStatusBar);
-    //     this.addToMap(this.BubblesStatusBar);
-    //     this.ctx.translate(this.camera_x, 0); //forward
-
-    //     this.addToMap(this.character);
-    //     this.addObjecttoMap(this.level.enemies);
-    //     this.addObjecttoMap(this.level.coins);
-    //     this.addObjecttoMap(this.level.bubbles);
-    //     this.addObjecttoMap(this.throwableObjects);
-
-    //     this.ctx.translate(-this.camera_x, 0);
-    //     // draw wird immer wieder aufrufen, damit die Position des Charakters immer wieder neu gezeichnet wird.
-    //     requestAnimationFrame(() => this.draw());
-    // }
-
+    
     draw() {
         this.clearCanvas();
 
@@ -273,45 +227,6 @@ class World {
         this.finKeyWasPressed = true;
         this.character.startFinAttack();
     }
-
-    // checkThrowObject() {
-    //     if (!this.keyboard.D) {
-    //         this.throwKeyWasPressed = false;
-    //         return;
-    //     }
-
-    //     // D key press-ku okka Bubbles maatrame throw avuthundi.
-    //     if (this.throwKeyWasPressed) {
-    //         return;
-    //     }
-
-    //     this.throwKeyWasPressed = true;
-
-    //     // Bubbles collect chesi unte maatrame throw cheyyali.
-    //     if (this.collectedBubbles > 0) {
-    //         this.character.playBossAttack();
-    //         const direction = this.character.otherDirection ? -1 : 1;
-    //         const BubblesX = direction === 1
-    //             ? this.character.x + this.character.width - 20
-    //             : this.character.x - 60;
-    //         const BubblesY = this.character.y + 120;
-
-    //         setTimeout(() => {
-    //             const bubble = new ThrowableObject(
-    //                 BubblesX,
-    //                 BubblesY,
-    //                 direction
-    //             );
-    //             this.throwableObjects.push(bubble);
-    //         }, 700);
-
-    //         this.collectedBubbles--;
-
-    //         const percentage =
-    //             (this.collectedBubbles / this.totalBubbles) * 100;
-    //         this.BubblesStatusBar.setPercentage(percentage);
-    //     }
-    // }
 
     checkThrowObject() {
         if (!this.keyboard.D) {
