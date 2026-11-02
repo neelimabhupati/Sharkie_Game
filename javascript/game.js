@@ -67,42 +67,36 @@ function startGame() {
 
 function toggleMute() {
     audioMuted = !audioMuted;
+    setAudioTracksMuted();
+    updateVolumeButtons();
+}
 
-    const audioTracks = [
-        homeBgm,
-        gameBgm,
-        bossBgm,
-        yesHaveBgm,
-        winningBgm
-    ];
+function setAudioTracksMuted() {
+    const tracks = [homeBgm, gameBgm, bossBgm, yesHaveBgm, winningBgm];
 
     if (world) {
-        audioTracks.push(
-            world.coinSound,
-            world.bubbleSound,
-            world.hurtSound,
-            world.deadSound
-        );
+        tracks.push(world.coinSound, world.bubbleSound);
+        tracks.push(world.hurtSound, world.deadSound);
     }
 
-    audioTracks.forEach(track => {
-        if (track) {
-            track.muted = audioMuted;
-        }
+    tracks.forEach(track => {
+        track.muted = audioMuted;
     });
+}
 
-    const homeVolumeButton = document.getElementById("home-volume-button");
-    const gameVolumeButton = document.getElementById("volume-button");
+function updateVolumeButtons() {
     const icon = audioMuted ? "🔇" : "🔊";
     const label = audioMuted ? "Unmute audio" : "Mute audio";
 
-    homeVolumeButton.textContent = icon;
-    homeVolumeButton.setAttribute("aria-label", label);
-    homeVolumeButton.title = label;
+    updateVolumeButton("home-volume-button", icon, label);
+    updateVolumeButton("volume-button", icon, label);
+}
 
-    gameVolumeButton.textContent = icon;
-    gameVolumeButton.setAttribute("aria-label", label);
-    gameVolumeButton.title = label;
+function updateVolumeButton(buttonId, icon, label) {
+    const button = document.getElementById(buttonId);
+    button.textContent = icon;
+    button.setAttribute("aria-label", label);
+    button.title = label;
 }
 
 function applyMuteToWorldSounds() {
@@ -157,28 +151,54 @@ function startBossBgm() {
     }
 }
 
-function stopBossBgm() {
-    if (!bossBgm.paused) {
-        bossBgm.pause();
-        bossBgm.currentTime = 0;
-    }
+// function stopBossBgm() {
+//     if (!bossBgm.paused) {
+//         bossBgm.pause();
+//         bossBgm.currentTime = 0;
+//     }
 
-    if (
-        world &&
+//     if (
+//         world &&
+//         world.replyShownAt === null &&
+//         !world.gameLost &&
+//         !world.gameWon &&
+//         gameBgm.paused
+//     ) {
+//         gameBgm.play().catch(error => {
+//             console.error("Could not resume game music:", error);
+//         });
+//     }
+// }
+
+function stopBossBgm() {
+    pauseBossBgm();
+    resumeGameBgm();
+}
+
+function pauseBossBgm() {
+    if (bossBgm.paused) return;
+    bossBgm.pause();
+    bossBgm.currentTime = 0;
+}
+
+function resumeGameBgm() {
+    if (!canResumeGameBgm()) return;
+
+    gameBgm.play().catch(error => {
+        console.error("Could not resume game music:", error);
+    });
+}
+
+function canResumeGameBgm() {
+    return world &&
         world.replyShownAt === null &&
         !world.gameLost &&
         !world.gameWon &&
-        gameBgm.paused
-    ) {
-        gameBgm.play().catch(error => {
-            console.error("Could not resume game music:", error);
-        });
-    }
+        gameBgm.paused;
 }
 
 function replayGame() {
     window.location.reload();
-
 }
 
 function goHome() {
@@ -233,8 +253,6 @@ window.addEventListener('keydown', (event) => {
         }
 
     }
-
-    // console.log(event);
 
 });
 
