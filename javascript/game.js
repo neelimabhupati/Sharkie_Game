@@ -35,32 +35,42 @@ const winningBgm = new Audio(
 winningBgm.loop = true;
 winningBgm.volume = 0.3;
 
-
-
 function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
 }
 
 function startGame() {
+    showGameScreen();
+    stopHomeMusic();
+    createGame();
+    playGameMusic();
+}
+
+function showGameScreen() {
     document.getElementById("replay-button").style.display = "none";
     document.getElementById("start-screen").style.display = "none";
     document.getElementById("game-container").style.display = "block";
     document.getElementById("canvas").style.display = "block";
+}
 
+function stopHomeMusic() {
     homeBgm.pause();
     homeBgm.currentTime = 0;
+}
 
+function createGame() {
     keyboard = new Keyboard();
     initLevel();
     init();
     applyMuteToWorldSounds();
+}
 
+function playGameMusic() {
     gameBgm.currentTime = 0;
     gameBgm.play().catch(error => {
         console.error("Could not play game music:", error);
     });
-
 }
 
 function toggleMute() {
@@ -99,7 +109,6 @@ function updateVolumeButton(buttonId, icon, label) {
 
 function applyMuteToWorldSounds() {
     if (!world) return;
-
     [
         world.coinSound,
         world.bubbleSound,

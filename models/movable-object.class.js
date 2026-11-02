@@ -22,21 +22,33 @@ class MovableObject extends DrawbleObject {
         return this.y < 180;
     }
 
-    isColliding(mo) {
-        const thisX = this.x + (this.collisionOffsetX ?? 0);
-        const thisY = this.y + (this.collisionOffsetY ?? 0);
-        const thisWidth = this.collisionWidth ?? this.width;
-        const thisHeight = this.collisionHeight ?? this.height;
+    isColliding(otherObject) {
+        const box1 = this.getCollisionBox(this);
+        const box2 = this.getCollisionBox(otherObject);
+        return this.boxesOverlap(box1, box2);
+    }
 
-        const otherX = mo.x + (mo.collisionOffsetX ?? 0);
-        const otherY = mo.y + (mo.collisionOffsetY ?? 0);
-        const otherWidth = mo.collisionWidth ?? mo.width;
-        const otherHeight = mo.collisionHeight ?? mo.height;
+    getCollisionBox(object) {
+        const offsetX = object.collisionOffsetX != null
+            ? object.collisionOffsetX : 0;
+        const offsetY = object.collisionOffsetY != null
+            ? object.collisionOffsetY : 0;
 
-        return thisX < otherX + otherWidth &&
-            thisX + thisWidth > otherX &&
-            thisY < otherY + otherHeight &&
-            thisY + thisHeight > otherY;
+        return {
+            x: object.x + offsetX,
+            y: object.y + offsetY,
+            width: object.collisionWidth != null
+                ? object.collisionWidth : object.width,
+            height: object.collisionHeight != null
+                ? object.collisionHeight : object.height
+        };
+    }
+
+    boxesOverlap(box1, box2) {
+        return box1.x < box2.x + box2.width &&
+            box1.x + box1.width > box2.x &&
+            box1.y < box2.y + box2.height &&
+            box1.y + box1.height > box2.y;
     }
 
     hit() {
@@ -48,7 +60,6 @@ class MovableObject extends DrawbleObject {
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit; // difference in ms
         timepassed = timepassed / 1000; // Difference in s
-        // console.log(timepassed);
         return timepassed < 1;
     }
 
@@ -57,7 +68,6 @@ class MovableObject extends DrawbleObject {
     }
 
     moveRight() {
-        // console.log("Moving right");
         this.x += this.speed;
 
     }
