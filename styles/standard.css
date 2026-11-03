@@ -1,0 +1,16 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Luckiest Guy', Arial, Helvetica, sans-serif;
+
+    background-color: #04b8d4;
+    background-image: url("../images/Grafiken-Sharkie/3. Background/babyshark_bg.avif");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
