@@ -1,0 +1,7 @@
+#impressum a {
+    color: #8fffea;
+}
+
+#impressum p {
+    margin: clamp(8px, 2vw, 16px) 0;
+}

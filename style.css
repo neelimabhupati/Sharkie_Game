@@ -329,10 +329,6 @@ h1 {
     cursor: pointer;
 }
 
-#impressum a {
-    color: #8fffea;
-}
-
 #credits h2 {
     margin-top: 0;
     color: #8fffea;
@@ -579,8 +575,7 @@ h1 {
     font-size: clamp(20px, 5vw, 28px);
 }
 
-.credits-list p,
-#impressum p {
+.credits-list p{
     margin: clamp(8px, 2vw, 16px) 0;
 }
 
