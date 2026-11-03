@@ -5,32 +5,32 @@ let keyboard = new Keyboard();
 let audioMuted = false;
 
 const homeBgm = new Audio(
-    "./images/Grafiken-Sharkie/7.Sound track/Home screen_bgm.mp3"
+    "./assets/audio/Home screen_bgm.mp3"
 );
 homeBgm.loop = true;
 homeBgm.volume = 0.4;
 
 
 const gameBgm = new Audio(
-    "./images/Grafiken-Sharkie/7.Sound track/Start Game_bgm.mp3"
+    "./assets/audio/Start Game_bgm.mp3"
 );
 gameBgm.loop = true;
 gameBgm.volume = 0.25;
 
 const bossBgm = new Audio(
-    "./images/Grafiken-Sharkie/7.Sound track/endboss_bgm.mp3"
+    "./assets/audio/endboss_bgm.mp3"
 );
 bossBgm.loop = true;
 bossBgm.volume = 1;
 
 const yesHaveBgm = new Audio(
-    "./images/Grafiken-Sharkie/7.Sound track/yes i have.mp3"
+    "./assets/audio/yes i have.mp3"
 );
 yesHaveBgm.loop = true;
 yesHaveBgm.volume = 0.25;
 
 const winningBgm = new Audio(
-    "./images/Grafiken-Sharkie/7.Sound track/winning bgm.mp3"
+    "./assets/audio/winning bgm.mp3"
 );
 winningBgm.loop = true;
 winningBgm.volume = 0.3;

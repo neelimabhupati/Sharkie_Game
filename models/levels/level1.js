@@ -2,7 +2,6 @@ let level1;
 
 function initLevel() {
 
-
     level1 = new Level([
 
         new PufferFish(550),
@@ -33,28 +32,6 @@ function initLevel() {
                 719 * 3
             ),
         ],
-
-        // Array.from({ length: 10 }, (_, index) =>
-        //     new Coin(
-        //         150 + index * 200 + Math.random() * 100,
-        //         200 + Math.random() * 120
-        //     )
-        // ),
-
-        // Array.from({ length: 5 }, (_, index) =>
-        //     new Bubble(
-        //         300 + index * 350 + Math.random() * 100,
-        //         340
-        //     )
-        // ).concat(
-        //     Array.from({ length: 8 }, (_, index) =>
-        //         new Bubble(
-        //             350 + index * 260,
-        //             50 + (index % 2) * 80,
-        //             './images/Grafiken-Sharkie/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png'
-        //         )
-        //     )
-        // ));
         [
             new Coin(150 + Math.random() * 100, 200 + Math.random() * 120),
             new Coin(350 + Math.random() * 100, 200 + Math.random() * 120),
@@ -84,4 +61,5 @@ function initLevel() {
             new Bubble(1910, 50, "./images/Grafiken-Sharkie/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png"),
             new Bubble(2170, 130, "./images/Grafiken-Sharkie/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png")
         ]));
+        
 }

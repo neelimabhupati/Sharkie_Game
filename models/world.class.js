@@ -23,19 +23,24 @@ class World {
     finKeyWasPressed = false;
 
     coinSound = new Audio(
-        "./images/Grafiken-Sharkie/7.Sound track/coin.mp3"
+        "./assets/audio/coin.mp3"
     );
     bubbleSound = new Audio(
-        "./images/Grafiken-Sharkie/7.Sound track/bubble.mp3"
+        "./assets/audio/bubble.mp3"
     );
     hurtSound = new Audio(
-        "./images/Grafiken-Sharkie/7.Sound track/hurt.mp3"
+        "./assets/audio/hurt.mp3"
     );
+
+    fightSound = new Audio(
+        "./assets/audio/fight.mp3"
+    );
+
 
     deadSoundStarted = false;
 
     deadSound = new Audio(
-        "./images/Grafiken-Sharkie/7.Sound track/dead.mp3"
+        "./assets/audio/dead.mp3"
     );
 
     replyShownAt = null;
@@ -317,6 +322,12 @@ class World {
         if (!bubble.isColliding(boss)) return false;
         this.throwableObjects.splice(index, 1);
         if (!boss.hitByBubbles()) return false;
+
+        this.fightSound.currentTime = 0;
+        this.fightSound.play().catch(error => {
+            console.error("Could not play fight sound:", error);
+        });
+        
         setTimeout(() => this.finishEndboss(boss), 1500);
         return true;
     }
