@@ -1,3 +1,6 @@
+/**
+ * Tracks which game-control keys are currently pressed.
+ */
 class Keyboard {
     LEFT = false;
     RIGHT = false;
