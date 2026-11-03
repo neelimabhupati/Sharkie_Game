@@ -35,11 +35,13 @@ const winningBgm = new Audio(
 winningBgm.loop = true;
 winningBgm.volume = 0.3;
 
+/** Initializes the canvas and creates the game world. */
 function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
 }
 
+/** Starts a new game and switches from the start screen. */
 function startGame() {
     showGameScreen();
     stopHomeMusic();
@@ -47,6 +49,7 @@ function startGame() {
     playGameMusic();
 }
 
+/** Displays the game screen and hides the start screen. */
 function showGameScreen() {
     document.getElementById("replay-button").style.display = "none";
     document.getElementById("start-screen").style.display = "none";
@@ -54,11 +57,13 @@ function showGameScreen() {
     document.getElementById("canvas").style.display = "block";
 }
 
+/** Stops and resets the home-screen background music. */
 function stopHomeMusic() {
     homeBgm.pause();
     homeBgm.currentTime = 0;
 }
 
+/** Creates a new game, initializes its level, and applies the mute setting. */
 function createGame() {
     keyboard = new Keyboard();
     initLevel();
@@ -66,6 +71,7 @@ function createGame() {
     applyMuteToWorldSounds();
 }
 
+/** Starts the game background music. */
 function playGameMusic() {
     gameBgm.currentTime = 0;
     gameBgm.play().catch(error => {
@@ -73,12 +79,14 @@ function playGameMusic() {
     });
 }
 
+/** Toggles mute state for the game's audio tracks. */
 function toggleMute() {
     audioMuted = !audioMuted;
     setAudioTracksMuted();
     updateVolumeButtons();
 }
 
+/** Applies the current mute state to all available audio tracks. */
 function setAudioTracksMuted() {
     const tracks = [homeBgm, gameBgm, bossBgm, yesHaveBgm, winningBgm];
 
@@ -92,6 +100,7 @@ function setAudioTracksMuted() {
     });
 }
 
+/** Updates the volume buttons to show the current mute state. */
 function updateVolumeButtons() {
     const icon = audioMuted ? "🔇" : "🔊";
     const label = audioMuted ? "Unmute audio" : "Mute audio";
@@ -100,6 +109,12 @@ function updateVolumeButtons() {
     updateVolumeButton("volume-button", icon, label);
 }
 
+/**
+ * Updates a volume button's icon and accessible label.
+ * @param {string} buttonId - ID of the button to update.
+ * @param {string} icon - Icon to display.
+ * @param {string} label - Accessible label and tooltip text.
+ */
 function updateVolumeButton(buttonId, icon, label) {
     const button = document.getElementById(buttonId);
     button.textContent = icon;
@@ -107,6 +122,7 @@ function updateVolumeButton(buttonId, icon, label) {
     button.title = label;
 }
 
+/** Applies the current mute state to sounds owned by the game world. */
 function applyMuteToWorldSounds() {
     if (!world) return;
     [
@@ -121,6 +137,7 @@ function applyMuteToWorldSounds() {
     });
 }
 
+/** Stops and resets all background music tracks. */
 function stopAllBgm() {
     [homeBgm, gameBgm, bossBgm, yesHaveBgm, winningBgm].forEach(track => {
         track.pause();
@@ -128,6 +145,7 @@ function stopAllBgm() {
     });
 }
 
+/** Stops other music and starts the "Yes, I have" track. */
 function startYesHaveBgm() {
     stopAllBgm();
     yesHaveBgm.play().catch(error => {
@@ -135,6 +153,7 @@ function startYesHaveBgm() {
     });
 }
 
+/** Stops other music and starts the victory music. */
 function startWinningBgm() {
     stopAllBgm();
     winningBgm.play().catch(error => {
@@ -142,11 +161,13 @@ function startWinningBgm() {
     });
 }
 
+/** Stops and resets the game background music. */
 function stopGameBgm() {
     gameBgm.pause();
     gameBgm.currentTime = 0;
 }
 
+/** Pauses the game music and starts the Endboss music if it is not already playing. */
 function startBossBgm() {
     gameBgm.pause();
 
@@ -158,17 +179,20 @@ function startBossBgm() {
     }
 }
 
+/** Stops the Endboss music and resumes game music when allowed. */
 function stopBossBgm() {
     pauseBossBgm();
     resumeGameBgm();
 }
 
+/** Pauses and resets the Endboss music. */
 function pauseBossBgm() {
     if (bossBgm.paused) return;
     bossBgm.pause();
     bossBgm.currentTime = 0;
 }
 
+/** Resumes game music if the current game state allows it. */
 function resumeGameBgm() {
     if (!canResumeGameBgm()) return;
 
@@ -177,6 +201,10 @@ function resumeGameBgm() {
     });
 }
 
+/**
+ * Determines whether game music can resume.
+ * @returns {boolean} Whether the game music can resume.
+ */
 function canResumeGameBgm() {
     return world &&
         world.replyShownAt === null &&
@@ -185,14 +213,17 @@ function canResumeGameBgm() {
         gameBgm.paused;
 }
 
+/** Reloads the page to replay the game. */
 function replayGame() {
     window.location.reload();
 }
 
+/** Reloads the page to return to the home screen. */
 function goHome() {
     window.location.reload();
 }
 
+/** Enters or exits fullscreen mode for the game container. */
 function toggleFullscreen() {
     const gameContainer = document.getElementById("game-container");
 
@@ -203,6 +234,7 @@ function toggleFullscreen() {
     }
 }
 
+/** Updates the fullscreen button's label after a fullscreen change. */
 function handleFullscreenChange() {
     const button = document.getElementById("fullscreen-button");
     const isFullscreen = Boolean(document.fullscreenElement);
@@ -212,15 +244,28 @@ function handleFullscreenChange() {
     button.title = label;
 }
 
+/**
+ * Handles a key press and updates the corresponding game control.
+ * @param {KeyboardEvent} event - Keyboard event from the browser.
+ */
 function handleKeyDown(event) {
     setKeyboardKey(event.keyCode, true);
     if (event.keyCode === 68) markReplyAsAnswered();
 }
 
+/**
+ * Handles a key release and updates the corresponding game control.
+ * @param {KeyboardEvent} event - Keyboard event from the browser.
+ */
 function handleKeyUp(event) {
     setKeyboardKey(event.keyCode, false);
 }
 
+/**
+ * Sets the pressed state of a game control.
+ * @param {number} keyCode - Key code to update.
+ * @param {boolean} isPressed - Whether the key is currently pressed.
+ */
 function setKeyboardKey(keyCode, isPressed) {
     if (keyCode === 39) keyboard.RIGHT = isPressed;
     if (keyCode === 37) keyboard.LEFT = isPressed;
@@ -230,12 +275,17 @@ function setKeyboardKey(keyCode, isPressed) {
     if (keyCode === 68) keyboard.D = isPressed;
 }
 
+/** Marks the Endboss reply as answered when the D key is pressed. */
 function markReplyAsAnswered() {
     if (world && world.replyShownAt !== null) {
         world.dPressedAfterReply = true;
     }
 }
 
+/**
+ * Starts home-screen music when the user clicks the start screen.
+ * @param {MouseEvent} event - Click event from the browser.
+ */
 function handleStartScreenClick(event) {
     if (!event.target.closest("#start-screen")) return;
     if (!homeBgm.paused) return;
@@ -245,6 +295,7 @@ function handleStartScreenClick(event) {
     });
 }
 
+/** Registers the game's keyboard, fullscreen, and click event listeners. */
 function addGameEventListeners() {
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     window.addEventListener("keydown", handleKeyDown);
@@ -252,6 +303,11 @@ function addGameEventListeners() {
     document.addEventListener("click", handleStartScreenClick, true);
 }
 
+/**
+ * Registers pointer handlers for a touch-control button.
+ * @param {string} buttonId - ID of the touch button.
+ * @param {string} key - Game control key associated with the button.
+ */
 function setupTouchControl(buttonId, key) {
     const button = document.getElementById(buttonId);
     button.addEventListener("pointerdown", event => pressTouchKey(event, button, key));
@@ -260,6 +316,12 @@ function setupTouchControl(buttonId, key) {
     button.addEventListener("lostpointercapture", event => releaseTouchKey(event, key));
 }
 
+/**
+ * Presses a game control in response to a pointer press.
+ * @param {PointerEvent} event - Pointer event from the browser.
+ * @param {HTMLButtonElement} button - Touch-control button being pressed.
+ * @param {string} key - Game control key to activate.
+ */
 function pressTouchKey(event, button, key) {
     event.preventDefault();
     button.setPointerCapture(event.pointerId);
@@ -267,6 +329,11 @@ function pressTouchKey(event, button, key) {
     if (key === "D") markReplyAsAnswered();
 }
 
+/**
+ * Releases a game control in response to a pointer release.
+ * @param {PointerEvent} event - Pointer event from the browser.
+ * @param {string} key - Game control key to deactivate.
+ */
 function releaseTouchKey(event, key) {
     event.preventDefault();
     keyboard[key] = false;
