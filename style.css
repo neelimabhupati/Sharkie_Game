@@ -355,7 +355,7 @@ h1 {
 
 @font-face {
     font-family: "Luckiest Guy";
-    src: url("./images/Grafiken-Sharkie/5.Font/Luckiest_Guy/LuckiestGuy-Regular.ttf") format("truetype");
+    src: url("./assets/fonts/Luckiest_Guy/LuckiestGuy-Regular.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
