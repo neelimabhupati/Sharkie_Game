@@ -1,6 +1,7 @@
 class World {
 
     character = new Character();
+
     level = level1;
     canvas;
     ctx;
@@ -57,7 +58,8 @@ class World {
         this.hurtSound.volume = 0.3;
         this.deadSound.volume = 1;
         this.setWorld();
-        this.draw();
+        this.renderer = new WorldRenderer(this);
+        this.renderer.draw();
         this.run();
     }
 
@@ -76,66 +78,7 @@ class World {
         });
     }
 
-    draw() {
-        this.clearCanvas();
 
-        if (this.drawResultScreen()) {
-            this.requestNextFrame();
-            return;
-        }
-
-        this.drawGameScene();
-        this.requestNextFrame();
-    }
-
-    clearCanvas() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-
-    drawResultScreen() {
-        if (!this.gameWon && !this.gameLost) return false;
-        document.getElementById("replay-button").style.display = "block";
-        const image = this.gameWon ? this.winImage : this.loseImage;
-        this.drawResultImage(image);
-        return true;
-    }
-
-    drawResultImage(image) {
-        if (!image.complete || image.naturalWidth === 0) return;
-        this.ctx.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
-    }
-
-    drawGameScene() {
-        this.drawBackground();
-        this.drawStatusBars();
-        this.drawGameObjects();
-    }
-
-    drawBackground() {
-        this.ctx.translate(this.camera_x, 0);
-        this.addObjecttoMap(this.level.backgroundObjects);
-        this.ctx.translate(-this.camera_x, 0);
-    }
-
-    drawStatusBars() {
-        this.addToMap(this.lifeStatusBar);
-        this.addToMap(this.coinStatusBar);
-        this.addToMap(this.BubblesStatusBar);
-    }
-
-    drawGameObjects() {
-        this.ctx.translate(this.camera_x, 0);
-        this.addToMap(this.character);
-        this.addObjecttoMap(this.level.enemies);
-        this.addObjecttoMap(this.level.coins);
-        this.addObjecttoMap(this.level.bubbles);
-        this.addObjecttoMap(this.throwableObjects);
-        this.ctx.translate(-this.camera_x, 0);
-    }
-
-    requestNextFrame() {
-        requestAnimationFrame(() => this.draw());
-    }
 
     run() {
         setInterval(() => this.runGameStep(), 200);
@@ -327,7 +270,7 @@ class World {
         this.fightSound.play().catch(error => {
             console.error("Could not play fight sound:", error);
         });
-        
+
         setTimeout(() => this.finishEndboss(boss), 1500);
         return true;
     }
@@ -401,35 +344,6 @@ class World {
     updateBubbleStatus() {
         const percentage = (this.collectedBubbles / this.totalBubbles) * 100;
         this.BubblesStatusBar.setPercentage(percentage);
-    }
-
-    addObjecttoMap(Objects) {
-        Objects.forEach((object) => {
-            this.addToMap(object);
-        });
-    }
-
-    addToMap(mo) {
-        if (mo.otherDirection) {
-            this.flipImage(mo)
-        }
-
-        mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
-
-        if (mo.otherDirection) {
-            this.flipImageBack(mo);
-        }
-    }
-
-    flipImage(mo) {
-        this.ctx.save();
-        this.ctx.translate(2 * mo.x + mo.width, 0);
-        this.ctx.scale(-1, 1);
-    }
-
-    flipImageBack() {
-        this.ctx.restore();
     }
 
 }
