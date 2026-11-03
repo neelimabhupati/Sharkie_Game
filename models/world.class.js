@@ -37,7 +37,6 @@ class World extends WorldInteractions {
         "./assets/audio/fight.mp3"
     );
 
-
     deadSoundStarted = false;
 
     deadSound = new Audio(

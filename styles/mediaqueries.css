@@ -1,10 +1,4 @@
 /* smartphones media query*/
-@media only screen and (max-width: 720px) {
-    canvas {
-        width: 100%;
-    }
-}
-
 @media (max-width: 768px) {
     body {
         box-sizing: border-box;
@@ -102,65 +96,6 @@
     }
 }
 
-@media screen and (max-width: 768px) {
-    .rotate-notice {
-        position: fixed;
-        inset: 0;
-        z-index: 9999;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 24px;
-        background: #073b66;
-        color: #fff;
-        font: 16px/1.5 Arial, sans-serif;
-        text-align: center;
-    }
-
-    .rotate-notice h2 {
-        margin: 12px 0 8px;
-        color: #8fffea;
-        font: bold 24px/1.2 Arial, sans-serif;
-    }
-
-    .rotate-notice p {
-        margin: 0;
-        color: #fff;
-    }
-
-    .rotate-icon {
-        color: #8fffea;
-        font: 56px/1 Arial, sans-serif;
-    }
-}
-
-@media (min-width: 310px) and (max-width: 420px) {
-    .start-menu {
-        width: 140px;
-        top: 60%;
-        right: 4%;
-        gap: 6px;
-    }
-
-    .start-menu button {
-        left: 20px;
-        width: 120px;
-        height: 34px;
-        min-width: 0;
-        padding: 4px;
-        font-size: 12px;
-    }
-
-    #home-volume-button {
-        top: 8px;
-        right: 8px;
-        width: 14px;
-        height: 24px;
-        /* font-size: 8px; */
-    }
-}
-
 @media (max-width: 768px) and (orientation: portrait) {
     #touch-controls {
         position: absolute;
@@ -239,8 +174,71 @@
     }
 }
 
+
 @media (max-width: 500px) {
     .info-items {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+@media screen and (max-width: 768px) {
+    .rotate-notice {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: #073b66;
+        color: #fff;
+        font: 16px/1.5 Arial, sans-serif;
+        text-align: center;
+    }
+
+    .rotate-notice h2 {
+        margin: 12px 0 8px;
+        color: #8fffea;
+        font: bold 24px/1.2 Arial, sans-serif;
+    }
+
+    .rotate-notice p {
+        margin: 0;
+        color: #fff;
+    }
+
+    .rotate-icon {
+        color: #8fffea;
+        font: 56px/1 Arial, sans-serif;
+    }
+}
+
+@media (min-width: 310px) and (max-width: 420px) {
+    .start-menu {
+        width: 140px;
+        top: 60%;
+        right: 4%;
+        gap: 6px;
+    }
+
+    .start-menu button {
+        left: 20px;
+        width: 120px;
+        height: 34px;
+        min-width: 0;
+        padding: 4px;
+        font-size: 12px;
+    }
+
+    #home-volume-button {
+        top: 8px;
+        right: 8px;
+        width: 14px;
+        height: 24px;
+        /* font-size: 8px; */
+    }
+}
+
+
+
