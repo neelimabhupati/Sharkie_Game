@@ -172,11 +172,6 @@ class WorldInteractions {
         this.throwableObjects.splice(index, 1);
         if (!boss.hitByBubbles()) return false;
 
-        // this.fightSound.currentTime = 0;
-        // this.fightSound.play().catch(error => {
-        //     console.error("Could not play fight sound:", error);
-        // });
-
         setTimeout(() => this.finishEndboss(boss), 1500);
         return true;
     }
@@ -286,8 +281,7 @@ class WorldInteractions {
     countPoisonBubble(bubble) {
         if (!bubble.isPoisoned) return;
         this.collectedPoisonBubbles++;
-        console.log("Poison bubbles collected:", this.collectedPoisonBubbles);
-    }
+            }
 
     /**
      * Updates the bubble status bar based on the number of bubbles collected.

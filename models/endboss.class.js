@@ -372,7 +372,6 @@ class Endboss extends MovableObject {
      */
     logDialogue() {
         if (Date.now() - (this.lastDialogueLogAt || 0) < 1000) return;
-        console.log("Poison bubbles:", this.world.collectedPoisonBubbles);
         this.lastDialogueLogAt = Date.now();
     }
 
