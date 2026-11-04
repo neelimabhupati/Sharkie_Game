@@ -30,6 +30,7 @@ class PufferFish extends MovableObject {
      * If no position is provided, a random starting position is chosen.
      *
      * @param {number} [x] - Horizontal starting position.
+     * @param {number} [y] - Vertical starting position.
      */
     constructor(x = 200 + Math.random() * 500 , y = 360) {
         super();

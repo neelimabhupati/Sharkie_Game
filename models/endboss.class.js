@@ -213,7 +213,7 @@ class Endboss extends MovableObject {
             return;
         }
 
-        this.x = Math.max(targetX, this.x - 12);
+        this.x = Math.max(targetX, this.x - 20);
         this.playAttackFrame();
     }
 
@@ -275,7 +275,7 @@ class Endboss extends MovableObject {
         this.hits++;
         this.hurtUntil = Date.now() + 800;
 
-        if (this.hits < 4) return false;
+        if (this.hits < 7) return false;
 
         this.defeated = true;
         this.startDeathAnimation();
@@ -451,6 +451,6 @@ class Endboss extends MovableObject {
         ctx.font = "bold 16px Arial";
         ctx.textAlign = "center";
         ctx.fillText("You can only defeat me", x + 110, y + 28);
-        ctx.fillText("with 4 poison bubbles!", x + 110, y + 52);
+        ctx.fillText("with 7 poison bubbles!", x + 110, y + 52);
     }
 }

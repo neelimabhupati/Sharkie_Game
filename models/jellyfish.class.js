@@ -34,7 +34,7 @@ class Jellyfish extends MovableObject {
         this.loadImages(this.IMAGES_SWIMMING);
         this.x = x;
         this.y = y;
-        this.speed = 1;
+        this.speed = 2;
         this.animate();
     }
 
