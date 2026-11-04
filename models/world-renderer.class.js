@@ -79,8 +79,21 @@ class WorldRenderer {
         this.addToMap(world.lifeStatusBar);
         this.addToMap(world.coinStatusBar);
         this.addToMap(world.BubblesStatusBar);
+
+        this.drawEndbossStatusBar();
     }
 
+    /** Draws the Endboss health bar after the boss introduction. */
+    drawEndbossStatusBar() {
+        const endboss = this.world.level.enemies.find(
+            enemy => enemy instanceof Endboss
+        );
+
+        if (endboss?.introFinished && !endboss.defeated) {
+            this.addToMap(this.world.endbossLifeStatusBar);
+        }
+    }
+    
     /** Draws the character, enemies, collectibles, and thrown objects. */
     drawGameObjects() {
         const world = this.world;

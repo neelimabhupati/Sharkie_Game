@@ -26,6 +26,9 @@ class World extends WorldInteractions {
     /** Status bar displaying the character's life. */
     lifeStatusBar = new LifeStatusBar();
 
+    /** Status bar displaying the Endboss's remaining health. */
+    endbossLifeStatusBar = new LifeStatusBar();
+
     /** Status bar displaying collected coins. */
     coinStatusBar = new CoinStatusBar();
 
@@ -114,6 +117,8 @@ class World extends WorldInteractions {
         this.hurtSound.volume = 0.3;
         this.deadSound.volume = 1;
         this.enemyHitSound.volume = 0.3;
+        this.endbossLifeStatusBar.x = 470;
+        this.endbossLifeStatusBar.y = 30;
         this.setWorld();
         this.renderer = new WorldRenderer(this);
         this.renderer.draw();

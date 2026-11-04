@@ -49,6 +49,9 @@ class Endboss extends MovableObject {
     /** Timestamp when the current phase should end. */
     phaseEndsAt = 0;
 
+    /** Number of poison-bubble hits required to defeat the boss. */
+    maxHits = 7;
+
     /** Walking animation images for the boss. */
     IMAGES_WALKING = [
         './images/Grafiken-Sharkie/2.Enemy/3 Final Enemy/2.floating/1.png',
@@ -265,17 +268,21 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Applies damage when the boss is hit by poison bubbles.
+     * Applies damage when the boss is hit by a poison bubble
+     * and updates the boss's health bar.
      *
-     * @returns {boolean} True if the boss was defeated, otherwise false.
+     * @returns {boolean} True if the boss was defeated; otherwise, false.
      */
     hitByBubbles() {
         if (this.defeated) return false;
 
         this.hits++;
         this.hurtUntil = Date.now() + 800;
+        this.world.endbossLifeStatusBar.setPercentage(
+            100 - (this.hits / this.maxHits) * 100
+        );
 
-        if (this.hits < 7) return false;
+        if (this.hits < this.maxHits) return false;
 
         this.defeated = true;
         this.startDeathAnimation();
