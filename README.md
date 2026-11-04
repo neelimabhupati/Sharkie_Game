@@ -22,6 +22,7 @@ Move Sharkie through the underwater level, collect items, avoid enemies, and def
 | Move | Arrow keys | Direction buttons |
 | Tail-slap | `Space` | Tail slap |
 | Throw a poison bubble | `D` | Poison bubble |
+| Stomp a Pufferfish or Jellyfish while touching it | `↓` Down Arrow | Down button |
 
 Collect poison bubbles and hit the Endboss four times to defeat it.
 
