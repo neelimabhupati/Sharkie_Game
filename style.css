@@ -28,7 +28,6 @@ h1 {
     border-radius: 30px;
 }
 
-
 #replay-button {
     display: none;
     position: absolute;
@@ -240,9 +239,7 @@ h1 {
     box-sizing: border-box;
     position: relative;
     width: min(85vw, 700px);
-    height: auto;
     max-height: 50vh;
-    /* padding: 16px; */
     overflow-y: hidden;
     margin: auto;
     border: 3px solid #8fffea;
