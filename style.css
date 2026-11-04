@@ -121,7 +121,8 @@ h1 {
 }
 
 #game-container:fullscreen #fullscreen-button,
-#game-container:fullscreen #home-button {
+#game-container:fullscreen #home-button,
+#game-container:fullscreen #volume-button {
     top: 24px;
     width: 72px;
     height: 72px;
