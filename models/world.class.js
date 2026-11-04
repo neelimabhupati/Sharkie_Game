@@ -83,6 +83,9 @@ class World extends WorldInteractions {
     /** Whether the character's death sound has started playing. */
     deadSoundStarted = false;
 
+    /** Sound played when an enemy is defeated. */
+    enemyHitSound = new Audio("./assets/audio/enemies_hit.mp3");
+
     /** Sound played when the character dies. */
     deadSound = new Audio("./assets/audio/dead.mp3");
 
@@ -110,6 +113,7 @@ class World extends WorldInteractions {
         this.bubbleSound.volume = 0.2;
         this.hurtSound.volume = 0.3;
         this.deadSound.volume = 1;
+        this.enemyHitSound.volume = 0.3;
         this.setWorld();
         this.renderer = new WorldRenderer(this);
         this.renderer.draw();

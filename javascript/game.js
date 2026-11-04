@@ -91,7 +91,7 @@ function setAudioTracksMuted() {
     const tracks = [homeBgm, gameBgm, bossBgm, yesHaveBgm, winningBgm];
 
     if (world) {
-        tracks.push(world.coinSound, world.bubbleSound);
+        tracks.push(world.coinSound, world.bubbleSound, world.enemyHitSound);
         tracks.push(world.hurtSound, world.deadSound);
     }
 
@@ -129,7 +129,8 @@ function applyMuteToWorldSounds() {
         world.coinSound,
         world.bubbleSound,
         world.hurtSound,
-        world.deadSound
+        world.deadSound,
+        world.enemyHitSound
     ].forEach(sound => {
         if (sound) {
             sound.muted = audioMuted;

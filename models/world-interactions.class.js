@@ -46,11 +46,19 @@ class WorldInteractions {
             return;
         }
 
-        enemy.die();
+        this.playEnemyHitSound();
         this.character.jump();
+        enemy.die();
         this.removeEnemyAfterDelay(enemy);
     }
 
+    /** Plays the sound when an enemy is defeated. */
+    playEnemyHitSound() {
+        this.enemyHitSound.currentTime = 0;
+        this.enemyHitSound.play().catch(error => {
+            console.error("Could not play enemy hit sound:", error);
+        });
+    }
     /**
      * Checks whether the character's fin attack hits an enemy.
      *
@@ -63,6 +71,7 @@ class WorldInteractions {
         if (this.character.finAttackHits.has(enemy)) return false;
         if (!this.character.isFinSlapColliding(enemy)) return false;
         this.character.finAttackHits.add(enemy);
+        this.playEnemyHitSound();
         enemy.die();
         this.removeEnemyAfterDelay(enemy);
         return true;
