@@ -31,11 +31,12 @@ class PufferFish extends MovableObject {
      *
      * @param {number} [x] - Horizontal starting position.
      */
-    constructor(x = 200 + Math.random() * 500) {
+    constructor(x = 200 + Math.random() * 500 , y = 360) {
         super();
         this.loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
         this.x = x;
+        this.y = y;
         this.speed = 0.15 + Math.random() * 0.25;
         this.animate();
     }

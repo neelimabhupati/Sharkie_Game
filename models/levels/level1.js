@@ -5,10 +5,15 @@ function initLevel() {
     level1 = new Level([
 
         new PufferFish(550),
+        new PufferFish(800, 100),
+        new PufferFish(1000, 150),
+        new PufferFish(1300, 200),  
         new PufferFish(1100),
         new PufferFish(1750),
-        // new Jellyfish(800, 140),
-        // new Jellyfish(1450, 250),
+        new Jellyfish(400, 200),
+        new Jellyfish(600, 250),
+        new Jellyfish(800, 140),
+        new Jellyfish(1450, 250),
         new Jellyfish(1100, 300),
         new Jellyfish(1850, 120),
         new Endboss()
